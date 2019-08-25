@@ -1,46 +1,43 @@
-'use strict';
+"use strict";
 
 module.exports = {
-  url: 'https://lumen.netlify.com',
-  pathPrefix: '/',
-  title: 'Blog by John Doe',
-  subtitle: 'Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu.',
-  copyright: '© All rights reserved.',
-  disqusShortname: '',
-  postsPerPage: 4,
-  googleAnalyticsId: 'UA-73379983-2',
+  url: "https://phacks.dev",
+  pathPrefix: "/",
+  title: "Blog by Nicolas Goutay",
+  subtitle: "Thoughts about Web Development, the JAMstack and other things.",
+  copyright: "© All rights reserved.",
+  disqusShortname: "",
+  postsPerPage: 8,
+  googleAnalyticsId: "UA-73379983-2",
   useKatex: false,
   menu: [
     {
-      label: 'Articles',
-      path: '/'
+      label: "Articles",
+      path: "/"
     },
     {
-      label: 'About me',
-      path: '/pages/about'
-    },
-    {
-      label: 'Contact me',
-      path: '/pages/contacts'
+      label: "About me",
+      path: "/pages/about"
     }
   ],
   author: {
-    name: 'John Doe',
-    photo: '/photo.jpg',
-    bio: 'Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu.',
+    name: "Nicolas Goutay",
+    photo: "/photo.jpg",
+    bio:
+      "Web Performance Evangelist @Theodo. International speaker, co-organizer of conferences & meetups. Pardon my French.",
     contacts: {
-      email: '',
-      facebook: '#',
-      telegram: '#',
-      twitter: '#',
-      github: '#',
-      rss: '',
-      vkontakte: '',
-      linkedin: '#',
-      instagram: '#',
-      line: '',
-      gitlab: '',
-      weibo: ''
+      email: "nicolas.goutay@gmail.com",
+      facebook: "",
+      telegram: "",
+      twitter: "phacks",
+      github: "phacks",
+      rss: "",
+      vkontakte: "",
+      linkedin: "",
+      instagram: "",
+      line: "",
+      gitlab: "",
+      weibo: ""
     }
   }
 };

@@ -1,0 +1,1187 @@
+---
+title: "Getting Started with React, Redux and Immutable: a Test-Driven TodoMVC Tutorial (Part 1)"
+date: "2016-03-13T12:21:32.169Z"
+template: "post"
+draft: false
+slug: "/posts/getting-started-with-react-redux-and-immutable-a-test-driven-todomvc-tutorial-part-1/"
+category: "Web Development"
+tags:
+  - "React"
+  - "Redux"
+  - "Web Development"
+description: "What follows is the first part of a tutorial that will hopefully guide you to the principles of the Redux way of doing things©."
+---
+
+A few weeks ago, I was idly browsing through [Hacker News](http://news.ycombinator.com), and read a headline about [Redux](http://redux.js.org/), which I understood was yet another thing that was supposed to get along well with [React](https://facebook.github.io/react/). [Javascript fatigue](https://medium.com/@ericclemmons/javascript-fatigue-48d4011b6fc4) had already got its grip on me, so I paid little attention, until I read the following features of Redux:
+
+- It enforces functional programming and ensures predictability of the app behavior
+- It allows for isomorphic app, where most of the logic is shared between the client and the server code
+- A time-traveling debugger?! Is that even possible?
+
+It seemed like an elegant solution to manage the state of React applications, plus who would say no to time travel? So I got in, read the examples in the [docs](http://redux.js.org/) and this fantastic tutorial by [@teropa](https://twitter.com/teropa): [A Comprehensive Guide to Test-First Development with Redux, React, and Immutable](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html) (which is a major source of inspiration for this article).
+
+I liked it. The code is elegant. The debugger is insanely great. I mean -- look at this (click to see in action):
+
+![time-traveling-awesomeness](/media/getting-started-with-react-redux-and-immutable-a-test-driven-todomvc-tutorial-part-1/time-travel.gif)
+
+What follows is the first part of a tutorial that will hopefully guide you to the principles of the Redux way of doing things©. It is purposefully limited in scope (it's client-side only, so no isomorphism; a quite simplistic app) in order to keep it somewhat concise. If you want to dig further, I can only recommend the tutorial mentioned above. A companion GitHub repo is available [here](https://github.com/phacks/redux-todomvc), which follows the steps to the final app and has a copy of this article. If you have any questions/suggestions on the code and/or the turorial, please leave a comment or - better yet, [open a Pull Request](https://github.com/phacks/redux-todomvc/pulls)!
+
+_Edit: The article was updated to use the ES2015 syntax for React classes. Thanks to **seantimm** for pointing that out in the comments!_
+
+## The app
+
+For the purpose of this tutorial we will build the classic [TodoMVC](http://todomvc.com/) app. For the record, the requirements are the following:
+
+- Each todo can be active or completed
+- A todo can be added, edited or deleted
+- Todos can be filtered by their status
+- A counter of active todos is displayed at the bottom
+- Completed todos can be deleted all at once
+
+You can see an example of such an app [here](http://todomvc.com/examples/react/#/).
+
+## Redux and Immutable: functional programming to the rescue
+
+A few months back, I was developing a webapp consisting of dashboards. As the app grew, we noticed more and more pernicious bugs, that were hard to corner and fix. Things like "if you go to this page, click on that button, then go back to the home page, grab a coffee, go to this page and click twice here, something weird happens". The source of all these bugs was either _side effects_ in our code or logic: an action could have an unwanted impact on something somewhere else in our app, that we were not aware of.
+
+That is where the power of Redux lies: the whole state of the app is contained in a single data structure, the _state tree_. This means that at every moment, what is displayed to the user is the only consequence of what is inside the state tree, which is the _single source of truth_. Every action in our app takes the state tree, apply the corresponding modifications (add a todo, for example) and outputs the updated state tree, which is then rendered to the user. There is no obscure side effects, no more references to a variable that was inadvertantly modified. This makes for a cleaner separation of concerns, a better app structure and allows for much better debugging.
+
+[Immutable](https://facebook.github.io/immutable-js) is a helper library developed by Facebook that provides tools to create and manipulate immutable data structures. Although it is by no means mandatory to use it alongside Redux, it enforces the functional approach by forbidding objects modifications. With Immutable, when we want to update an object, we actually _create_ another one with the modifications, and leave the original one as is.
+
+Here is an example drawn from the [docs](https://facebook.github.io/immutable-js):
+
+```javascript
+var map1 = Immutable.Map({ a: 1, b: 2, c: 3 });
+var map2 = map1.set("b", 2);
+assert(map1 === map2); // no change
+var map3 = map1.set("b", 50);
+assert(map1 !== map3); // change
+```
+
+We updated a value of `map1`, the `map1` object in itself remained identical and a new object, `map3`, was created.
+
+Immutable will be used to store the state tree of our app, and we will soon see that it provides a lot of simple methods to manipulate it concisely and efficiently.
+
+## Setting up the project
+
+_Disclaimer: a lot of the setting up is inspired by the @teropa tutorial mentionned earlier_
+
+_Note: it is recommended to follow this project with a version of NodeJS >= 4.0.0. You can install [nvm (node version manager)](https://github.com/creationix/nvm) to be able to switch between Node versions with ease._
+
+_Note: [here](https://github.com/phacks/redux-todomvc/commit/9e2d23ca16980566d9fcaeebbf198031ec55d42f) is the relevant commit in the companion repository._
+
+It is now time to setup the project:
+
+```bash
+mkdir redux-todomvc
+cd redux-todomvc
+npm init -y
+```
+
+The project directory will look like the following:
+
+```
+├── dist
+│   ├── bundle.js
+│   └── index.html
+├── node_modules
+├── package.json
+├── src
+├── test
+└── webpack.config.js
+```
+
+First, we write a simple HTML page in which will run our application:
+
+`dist/index.html`
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>React TodoMVC</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="bundle.js"></script>
+  </body>
+</html>
+```
+
+To go along with it, let's write a very simple script that will tell us that everything went fine with the packaging:
+
+`src/index.js`
+
+```javascript
+console.log("Hello World!");
+```
+
+We are going to build the packaged `bundle.js` file using [Webpack](https://webpack.github.io/). Among the advantages of Webpack feature speed, ease of configuration and most of all hot reload, i.e. the possibility for the webpage to take into account our latest changes without even reloading, meaning the state for the app is kept across (hot) reloads.
+
+Let's install webpack:
+
+```bash
+npm install --save-dev webpack webpack-dev-server
+```
+
+The app will be written using the ES2015 syntax, which brings along an impressive set of new features and some nicely integrated syntactic sugar. If you would like to know more about ES2015, this [recap](https://github.com/DrkSephy/es6-cheatsheet) is a neat resource.
+
+[Babel](https://babeljs.io/) will be used to transpile the ES2015 syntax to common JS:
+
+```bash
+npm install --save-dev babel-core babel-loader babel-preset-es2015
+```
+
+We are also going to use the JSX syntax to write our React components, so let's install the Babel React package:
+
+```bash
+npm install --save-dev babel-preset-react
+```
+
+Here we configure webpack to build our upcoming source files:
+
+`package.json`
+
+```javascript
+"babel": {
+  "presets": ["es2015", "react"]
+}
+```
+
+`webpack.config.js`
+
+```javascript
+module.exports = {
+  entry: ["./src/index.js"],
+  module: {
+    loaders: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: "babel"
+      }
+    ]
+  },
+  resolve: {
+    extensions: ["", ".js", ".jsx"]
+  },
+  output: {
+    path: __dirname + "/dist",
+    publicPath: "/",
+    filename: "bundle.js"
+  },
+  devServer: {
+    contentBase: "./dist"
+  }
+};
+```
+
+Now, let's add React and React Hot Loader to the project:
+
+```bash
+npm install --save react react-dom
+npm install --save-dev react-hot-loader
+```
+
+In order to enable the hot loading, a few changes are necessary in the webpack config file:
+
+`webpack.config.js`
+
+```javascript
+var webpack = require("webpack"); // Requiring the webpack lib
+
+module.exports = {
+  entry: [
+    "webpack-dev-server/client?http://localhost:8080", // Setting the URL for the hot reload
+    "webpack/hot/only-dev-server", // Reload only the dev server
+    "./src/index.js"
+  ],
+  module: {
+    loaders: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: "react-hot!babel" // Include the react-hot loader
+      }
+    ]
+  },
+  resolve: {
+    extensions: ["", ".js", ".jsx"]
+  },
+  output: {
+    path: __dirname + "/dist",
+    publicPath: "/",
+    filename: "bundle.js"
+  },
+  devServer: {
+    contentBase: "./dist",
+    hot: true // Activate hot loading
+  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin() // Wire in the hot loading plugin
+  ]
+};
+```
+
+### Setting up the unit testing framework
+
+We will be using Mocha and Chai as our test framework for this app. They are widely used, and the output they produce (a diff comparison of the expected and actual result) is great for doing test-driven-development. Chai-Immutable is a chai plugin that handles immutable data structures.
+
+```bash
+npm install --save immutable
+npm install --save-dev mocha chai chai-immutable
+```
+
+In our case we won't rely on a browser-based test runner like [Karma](https://karma-runner.github.io/) - instead, the [jsdom](https://github.com/tmpvar/jsdom) library will setup a DOM mock in pure javascript and will allow us to run our tests even faster:
+
+```bash
+npm install -save-dev jsdom
+```
+
+We also need to write a bootstrapping script for our tests that takes care of the following:
+
+- Mock the `document` and the `window` objects, normally provided by the browser
+- Tell chai that we are using immutable data structures with the package `chai-immutable`
+
+`test/setup.js`
+
+```javascript
+import jsdom from "jsdom";
+import chai from "chai";
+import chaiImmutable from "chai-immutable";
+
+const doc = jsdom.jsdom("<!doctype html><html><body></body></html>");
+const win = doc.defaultView;
+
+global.document = doc;
+global.window = win;
+
+Object.keys(window).forEach(key => {
+  if (!(key in global)) {
+    global[key] = window[key];
+  }
+});
+
+chai.use(chaiImmutable);
+```
+
+Let's update the `npm test` script so that it takes into account our setup:
+
+`package.json`
+
+```javascript
+"scripts": {
+  "test": "mocha --compilers js:babel-core/register --require ./test/setup.js 'test/**/*.@(js|jsx)'",
+  "test:watch": "npm run test -- --watch --watch-extensions jsx"
+},
+```
+
+Now, if we run `npm run test:watch`, all the `.js` or `.jsx` file in our `test` directory will be run as mocha tests each time we update them or our source files.
+
+The setup is now complete: we can run `webpack-dev-server` in a terminal, `npm run test:watch` in another, and head to `localhost:8080/` in a browser to check that `Hello World!` appears in the console.
+
+## Building a state tree
+
+As mentionned before, the state tree is the data structure that will hold all
+the information contained in our application (the _state_). This structure needs
+to be well thought of before actually developing the app, because it will shape
+a lot of the code structure and interactions.
+
+As an example here, our app is composed of several items in a todo list:
+
+![state_tree1](/media/getting-started-with-react-redux-and-immutable-a-test-driven-todomvc-tutorial-part-1/state_tree1.png)
+
+Each of these items have a text and, for an easier manipulation, an id.
+Moreover, each item can have one of two status - active or completed:
+Lastly, an item can be in a state of edition (when the user wants to edit the
+text), so we should keep track of that as well:
+
+![state_tree2](/media/getting-started-with-react-redux-and-immutable-a-test-driven-todomvc-tutorial-part-1/state_tree2.png)
+
+It is also possible to filter our items based on their statuses, so we can add a
+`filter` entry to obtain our final state tree:
+
+![state_tree3](/media/getting-started-with-react-redux-and-immutable-a-test-driven-todomvc-tutorial-part-1/state_tree3.png)
+
+## Writing the UI for our app
+
+![todo-app-structure](/media/getting-started-with-react-redux-and-immutable-a-test-driven-todomvc-tutorial-part-1/todo-app-structure.png)
+
+First of all, we are going to split the app into components:
+
+- The `TodoHeader` component is the input for creating new todos
+- The `TodoList` component is the list of todos
+- The `TodoItem` component is one todo
+- The `TextInput` component is the input for editing a todo
+- The `TodoTools` component displays the active counter, the filters and the "Clear completed" button
+- The `Footer` component displays the footer info and has no logic attached to it
+
+We are also going to create a `TodoApp` component that will hold all the others.
+
+### Bootstrapping our first component
+
+_Note: [here](https://github.com/phacks/redux-todomvc/commit/d1d2a56a8d2b4f898ed8fdf20f55e7f7f11ad6ad) is the relevant commit in the companion repository._
+
+As we saw, we are going to put all of our components in a single one, `TodoApp`. so let's begin by attaching this component to the `#app` div in our `index.html`:
+
+`src/index.jsx`
+
+```javascript
+import React from "react";
+import ReactDOM from "react-dom";
+import { List, Map } from "immutable";
+
+import TodoApp from "./components/TodoApp";
+
+const todos = List.of(
+  Map({ id: 1, text: "React", status: "active", editing: false }),
+  Map({ id: 2, text: "Redux", status: "active", editing: false }),
+  Map({ id: 3, text: "Immutable", status: "completed", editing: false })
+);
+
+ReactDOM.render(<TodoApp todos={todos} />, document.getElementById("app"));
+```
+
+As we used the JSX syntax in the `index.js` file, we have to change its extension to `.jsx`, and change the file name in the webpack config file as well:
+
+`webpack.config.js`
+
+```javascript
+entry: [
+  'webpack-dev-server/client?http://localhost:8080',
+  'webpack/hot/only-dev-server',
+  './src/index.jsx' // Change the index file extension
+],
+```
+
+### Writing the todo list UI
+
+Now, we are going to write a first version of the `TodoApp` component, that will display the list of todo items:
+
+`src/components/TodoApp.jsx`
+
+```javascript
+import React from 'react';
+
+export default class TodoApp extends React.Component {
+  getItems() {
+    return this.props.todos || [];
+  }
+  render() {
+    return <div>
+      <section className="todoapp">
+        <section className="main">
+          <ul className="todo-list">
+            {this.getItems().map(item =>
+              <li className="active" key={item.get('text')}>
+                <div className="view">
+                  <input type="checkbox"
+                         className="toggle" />
+                  <label htmlFor="todo">
+                    {item.get('text')}
+                  </label>
+                  <button className="destroy"></button>
+                </div>
+              </li>
+            )}
+          </ul>
+        </section>
+      </section>
+    </div>
+  }
+});
+```
+
+Two things come to mind.
+
+First, if you look at the result in your browser, it is not that much appealing. To fix that, we are going to use the [todomvc-app-css](https://github.com/tastejs/todomvc-app-css) package that brings along all the styles we need to make this a little more enjoyable:
+
+```bash
+npm install --save todomvc-app-css
+npm install style-loader css-loader --save-dev
+```
+
+We need to tell webpack to load css stylesheets too:
+
+`webpack.config.js`
+
+```javascript
+// ...
+module: {
+  loaders: [{
+    test: /\.jsx?$/,
+    exclude: /node_modules/,
+    loader: 'react-hot!babel'
+  }, {
+    test: /\.css$/,
+    loader: 'style!css' // We add the css loader
+  }]
+},
+//...
+```
+
+Then we will include the style in our `index.jsx` file:
+
+`src/index.jsx`
+
+```javascript
+// ...
+require("../node_modules/todomvc-app-css/index.css");
+
+ReactDOM.render(<TodoApp todos={todos} />, document.getElementById("app"));
+```
+
+The second thing is that the code seems complicated: it is. That is why we are going to create two more components: `TodoList` and `TodoItem` that will take care of respectively the list of all the items and a single one.
+
+_Note: [here](https://github.com/phacks/redux-todomvc/commit/90fe2cc5f8e1c20546c702b91230369c896b9b81) is the relevant commit in the companion repository._
+
+`src/components/TodoApp.jsx`
+
+```javascript
+import React from "react";
+import TodoList from "./TodoList";
+
+export default class TodoApp extends React.Component {
+  render() {
+    return (
+      <div>
+        <section className="todoapp">
+          <TodoList todos={this.props.todos} />
+        </section>
+      </div>
+    );
+  }
+}
+```
+
+The `TodoList` component will display a `TodoItem` component for each item it has received in its props:
+
+`src/components/TodoList.jsx`
+
+```javascript
+import React from "react";
+import TodoItem from "./TodoItem";
+
+export default class TodoList extends React.Component {
+  render() {
+    return (
+      <section className="main">
+        <ul className="todo-list">
+          {this.props.todos.map(item => (
+            <TodoItem key={item.get("text")} text={item.get("text")} />
+          ))}
+        </ul>
+      </section>
+    );
+  }
+}
+```
+
+`src/components/TodoItem.jsx`
+
+```javascript
+import React from "react";
+
+export default class TodoItem extends React.Component {
+  render() {
+    return (
+      <li className="todo">
+        <div className="view">
+          <input type="checkbox" className="toggle" />
+          <label htmlFor="todo">{this.props.text}</label>
+          <button className="destroy"></button>
+        </div>
+      </li>
+    );
+  }
+}
+```
+
+Before going more deeply into possible user actions and how we are going to integrate them in the app, let's add an input in the `TodoItem` component for editing:
+
+`src/components/TodoItem.jsx`
+
+```javascript
+import React from "react";
+
+import TextInput from "./TextInput";
+
+export default class TextInput extends React.Component {
+  render() {
+    return (
+      <li className="todo">
+        <div className="view">
+          <input type="checkbox" className="toggle" />
+          <label htmlFor="todo">{this.props.text}</label>
+          <button className="destroy"></button>
+        </div>
+        <TextInput /> // We add the TextInput component
+      </li>
+    );
+  }
+}
+```
+
+The `TextInput` component can be written as follows:
+
+`src/components/TextInput.jsx`
+
+```javascript
+import React from "react";
+
+export default class TextInput extends React.Component {
+  render() {
+    return <input className="edit" autoFocus={true} type="text" />;
+  }
+}
+```
+
+### The benefits of "pure" components: the PureRenderMixin
+
+_Note: [here](https://github.com/phacks/redux-todomvc/commit/d9a60c94ba194f63a21df0d2e5d1e6d6a2cca506) is the relevant commit in the companion repository._
+
+Apart for allowing a functional programming style, the fact that our UI is purely dependant on props allows us to use the `PureRenderMixin` for a performance boost, as per the [React docs](https://facebook.github.io/react/docs/pure-render-mixin.html):
+
+“If your React component's render function is "pure" (in other words, it renders the same result given the same props and state), you can use this mixin for a performance boost in some cases.”
+
+It is quite easy to add it to our child components, as shown in the [React documentation](https://facebook.github.io/react/docs/pure-render-mixin.html) (we will see in part two that the `TodoApp` component has some extra role that prevents the use of the `PureRenderMixin`):
+
+```shell
+npm install --save react-addons-pure-render-mixin
+```
+
+`src/components/TodoList.jsx`
+
+```javascript
+import React from "react";
+import PureRenderMixin from "react-addons-pure-render-mixin";
+import TodoItem from "./TodoItem";
+
+export default class TodoList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(
+      this
+    );
+  }
+  render() {
+    // ...
+  }
+}
+```
+
+`src/components/TodoItem.jsx`
+
+```javascript
+import React from "react";
+import PureRenderMixin from "react-addons-pure-render-mixin";
+import TextInput from "./TextInput";
+
+export default class TodoItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(
+      this
+    );
+  }
+  render() {
+    // ...
+  }
+}
+```
+
+`src/components/TextInput.jsx`
+
+```javascript
+import React from "react";
+import PureRenderMixin from "react-addons-pure-render-mixin";
+
+export default class TextInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(
+      this
+    );
+  }
+  render() {
+    // ...
+  }
+}
+```
+
+### Handling user actions in the list components
+
+Okay, so now we have our UI set up for the list components. However, none of what we have written yet takes into account user actions and how the app responds to them.
+
+#### The power of props
+
+In React, the `props` object is passed by settings attributes when we instantiate a container. For example, if we instantiate a `TodoItem` element this way:
+
+```html
+<TodoItem text={'Text of the item'} />
+```
+
+Then we can access, in the `TodoItem` component, the `this.props.text` variable:
+
+```javascript
+// in TodoItem.jsx
+console.log(this.props.text);
+// outputs 'Text of the item'
+```
+
+The Redux architecture makes an intensive use of `props`. The basic principle is that (nearly) every element's state should be residing only in its props. To put it another way: for the same set of props, two instances of an element should output the exact same result. As we saw before, the entire state of the app is contained in the _state tree_: this means that the state tree, passed down to components as `props`, will entirely and predictably determine the app's visual output.
+
+#### The TodoList component
+
+_Note: [here](https://github.com/phacks/redux-todomvc/commit/69707f07b6e9cbca7558cb85fcabff54615c1737) is the relevant commit in the companion repository._
+
+In this section and the following, we are going to follow a test-first approach.
+
+In order to help up test our components, the React library provides the `TestUtils` addons that provide, among others, the following methods:
+
+- `renderIntoDocument`, that renders a component into a detached DOM node;
+- `scryRenderedDOMComponentsWithTag`, that finds all instances of components in the DOM with the provided tag (like `li`, `input`...);
+- `scryRenderedDOMComponentsWithClass`, that finds all instances of components in the DOM with the provided class;
+- `Simulate`, that simulates user actions (a click, a key press, text inputs...)
+
+The `TestUtils` addon is not included in the `react` package, so we have to install it separately:
+
+```shell
+npm install --save-dev react-addons-test-utils
+```
+
+Our first test will ensure that the `TodoList` components displays all the active items in the list it has been given if the `filter` props has been set to `active`:
+
+`test/components/TodoList_spec.jsx`
+
+```javascript
+import React from "react";
+import TestUtils from "react-addons-test-utils";
+import TodoList from "../../src/components/TodoList";
+import { expect } from "chai";
+import { List, Map } from "immutable";
+
+const { renderIntoDocument, scryRenderedDOMComponentsWithTag } = TestUtils;
+
+describe("TodoList", () => {
+  it("renders a list with only the active items if the filter is active", () => {
+    const todos = List.of(
+      Map({ id: 1, text: "React", status: "active" }),
+      Map({ id: 2, text: "Redux", status: "active" }),
+      Map({ id: 3, text: "Immutable", status: "completed" })
+    );
+    const filter = "active";
+    const component = renderIntoDocument(
+      <TodoList filter={filter} todos={todos} />
+    );
+    const items = scryRenderedDOMComponentsWithTag(component, "li");
+
+    expect(items.length).to.equal(2);
+    expect(items[0].textContent).to.contain("React");
+    expect(items[1].textContent).to.contain("Redux");
+  });
+});
+```
+
+We can see that our test is failing: instead of the two active items we want to have displayed, there are three. That is perfectly normal, as we haven't yet wrote the logic to actually filter the items:
+
+`src/components/TodoList.jsx`
+
+```javascript
+// ...
+export default class TodoList extends React.Component {
+  // Filters the items according to their status
+  getItems() {
+    if (this.props.todos) {
+      return this.props.todos.filter(
+        item => item.get("status") === this.props.filter
+      );
+    }
+    return [];
+  }
+  render() {
+    return (
+      <section className="main">
+        <ul className="todo-list">
+          // Only the filtered items are displayed
+          {this.getItems().map(item => (
+            <TodoItem key={item.get("text")} text={item.get("text")} />
+          ))}
+        </ul>
+      </section>
+    );
+  }
+}
+```
+
+Our first test passes! Let's not stop there and add the tests for the filters `all` and `completed`:
+
+`test/components/TodoList_spec.js`
+
+```javascript
+// ...
+describe("TodoList", () => {
+  // ...
+  it("renders a list with only completed items if the filter is completed", () => {
+    const todos = List.of(
+      Map({ id: 1, text: "React", status: "active" }),
+      Map({ id: 2, text: "Redux", status: "active" }),
+      Map({ id: 3, text: "Immutable", status: "completed" })
+    );
+    const filter = "completed";
+    const component = renderIntoDocument(
+      <TodoList filter={filter} todos={todos} />
+    );
+    const items = scryRenderedDOMComponentsWithTag(component, "li");
+
+    expect(items.length).to.equal(1);
+    expect(items[0].textContent).to.contain("Immutable");
+  });
+
+  it("renders a list with all the items", () => {
+    const todos = List.of(
+      Map({ id: 1, text: "React", status: "active" }),
+      Map({ id: 2, text: "Redux", status: "active" }),
+      Map({ id: 3, text: "Immutable", status: "completed" })
+    );
+    const filter = "all";
+    const component = renderIntoDocument(
+      <TodoList filter={filter} todos={todos} />
+    );
+    const items = scryRenderedDOMComponentsWithTag(component, "li");
+
+    expect(items.length).to.equal(3);
+    expect(items[0].textContent).to.contain("React");
+    expect(items[1].textContent).to.contain("Redux");
+    expect(items[2].textContent).to.contain("Immutable");
+  });
+});
+```
+
+The third test is failing, as the logic for the `all` filter is sligthly different - let's update the component logic:
+
+`src/components/TodoList.jsx`
+
+```javascript
+// ...
+export default React.Component {
+  // Filters the items according to their status
+  getItems() {
+    if (this.props.todos) {
+      return this.props.todos.filter(
+        (item) => this.props.filter === 'all' || item.get('status') === this.props.filter
+      );
+    }
+    return [];
+  }
+  // ...
+});
+```
+
+At this time, we know that the items that are displayed on the app are filtered by the `filter` property. Indeed, if we look at the app in the browser, we see that no items are displayed as we haven't yet set it:
+
+`src/index.jsx`
+
+```javascript
+// ...
+const todos = List.of(
+  Map({ id: 1, text: "React", status: "active", editing: false }),
+  Map({ id: 2, text: "Redux", status: "active", editing: false }),
+  Map({ id: 3, text: "Immutable", status: "completed", editing: false })
+);
+
+const filter = "all";
+
+require("../node_modules/todomvc-app-css/index.css");
+
+ReactDOM.render(
+  <TodoApp todos={todos} filter={filter} />,
+  document.getElementById("app")
+);
+```
+
+`src/components/TodoApp.jsx`
+
+```javascript
+// ...
+export default class TodoApp extends React.Component {
+  render() {
+    return (
+      <div>
+        <section className="todoapp">
+          // We pass the filter props down to the TodoList component
+          <TodoList todos={this.props.todos} filter={this.props.filter} />
+        </section>
+      </div>
+    );
+  }
+}
+```
+
+Our items have now reappeared, and are filtered with the `filter` constant we have declared in the `index.jsx` file.
+
+#### The TodoItem component
+
+_Note: [here](https://github.com/phacks/redux-todomvc/commit/71d2835620f4ba6f3fc3665327f13ec4fba62eee) is the relevant commit in the companion repository._
+
+Now, let's take care of the `TodoItem` component. First of all, we want to make sure that the `TodoItem` component indeed renders an item. We also want to test the as yet unimplemented feature that when an item is completed, it is stricken-through:
+
+`test/components/TodoItem_spec.js`
+
+```javascript
+import React from "react";
+import TestUtils from "react-addons-test-utils";
+import TodoItem from "../../src/components/TodoItem";
+import { expect } from "chai";
+
+const { renderIntoDocument, scryRenderedDOMComponentsWithTag } = TestUtils;
+
+describe("TodoItem", () => {
+  it("renders an item", () => {
+    const text = "React";
+    const component = renderIntoDocument(<TodoItem text={text} />);
+    const todo = scryRenderedDOMComponentsWithTag(component, "li");
+
+    expect(todo.length).to.equal(1);
+    expect(todo[0].textContent).to.contain("React");
+  });
+
+  it("strikes through the item if it is completed", () => {
+    const text = "React";
+    const component = renderIntoDocument(
+      <TodoItem text={text} isCompleted={true} />
+    );
+    const todo = scryRenderedDOMComponentsWithTag(component, "li");
+
+    expect(todo[0].classList.contains("completed")).to.equal(true);
+  });
+});
+```
+
+To make the second test pass, we should apply the class `completed` to the item if the status, which will be passed down as props, is set to `completed`. We will use the `classnames` package to manipulate our DOM classes when they get a little complicated:
+
+```shell
+npm install --save classnames
+```
+
+`src/components/TodoItem.jsx`
+
+```javascript
+import React from "react";
+// We need to import the classNames object
+import classNames from "classnames";
+
+import TextInput from "./TextInput";
+
+export default class TodoItem extends React.Component {
+  render() {
+    var itemClass = classNames({
+      todo: true,
+      completed: this.props.isCompleted
+    });
+    return <li className={itemClass}>// ...</li>;
+  }
+}
+```
+
+An item should also have a particular look when it is being edited, a fact that is encapsulated by the `isEditing` prop:
+
+`test/components/TodoItem_spec.js`
+
+```javascript
+// ...
+describe("TodoItem", () => {
+  //...
+
+  it("should look different when editing", () => {
+    const text = "React";
+    const component = renderIntoDocument(
+      <TodoItem text={text} isEditing={true} />
+    );
+    const todo = scryRenderedDOMComponentsWithTag(component, "li");
+
+    expect(todo[0].classList.contains("editing")).to.equal(true);
+  });
+});
+```
+
+In order to make the test pass, we only need to update the `itemClass` object:
+
+`src/components/TodoItem.jsx`
+
+```javascript
+// ...
+export default class TodoItem extends React.Component {
+  render() {
+    var itemClass = classNames({
+      'todo': true,
+      'completed': this.props.isCompleted
+      'editing': this.props.isEditing
+    });
+    return <li className={itemClass}>
+      // ...
+    </li>
+  }
+};
+```
+
+The checkbox at the left of the item should be ckecked if the item is completed:
+
+`test/components/TodoItem_spec.js`
+
+```javascript
+// ...
+describe("TodoItem", () => {
+  //...
+
+  it("should be checked if the item is completed", () => {
+    const text = "React";
+    const text2 = "Redux";
+    const component = renderIntoDocument(
+      <TodoItem text={text} isCompleted={true} />,
+      <TodoItem text={text2} isCompleted={false} />
+    );
+    const input = scryRenderedDOMComponentsWithTag(component, "input");
+    expect(input[0].checked).to.equal(true);
+    expect(input[1].checked).to.equal(false);
+  });
+});
+```
+
+React has a method to set the state of a checkbox input: `defaultChecked`.
+
+`src/components/TodoItem.jsx`
+
+```javascript
+// ...
+export default class TodoItem extends React.Component {
+  render() {
+    // ...
+    return <li className={itemClass}>
+      <div className="view">
+        <input type="checkbox"
+               className="toggle"
+               defaultChecked={this.props.isCompleted}/>
+        // ...
+    </li>
+  }
+};
+```
+
+We also have to pass down the `isCompleted` and `isEditing` props down from the `TodoList` component:
+
+`src/components/TodoList.jsx`
+
+```javascript
+// ...
+export default class TodoList extends React.Component {
+  // ...
+  // This function checks whether an item is completed
+  isCompleted(item) {
+    return item.get("status") === "completed";
+  }
+  render() {
+    return (
+      <section className="main">
+        <ul className="todo-list">
+          {this.getItems().map(item => (
+            <TodoItem
+              key={item.get("text")}
+              text={item.get("text")}
+              // We pass down the info on completion and editing
+              isCompleted={this.isCompleted(item)}
+              isEditing={item.get("editing")}
+            />
+          ))}
+        </ul>
+      </section>
+    );
+  }
+}
+```
+
+For now, we are able to reflect the state of our app in the components: for
+example, a completed item will be stricken. However, a webapp also handles user
+actions, such as clicking on a button. In the Redux model, this is also
+processed using `props`, and more specifically by passing _callbacks_ as props.
+By doing so, we separate once again the UI from the logic of the app: the
+component need not knowing what particular action will derive from a click -
+only that the click will trigger _something_.
+
+To illustrate this principle, we are going to test that if the user clicks on
+the delete button (the red cross), the `deleteItem` function is called:
+
+_Note: [here](https://github.com/phacks/redux-todomvc/commit/b3a6851e8a9f65f1c44e66046bedd1db18c19a48) is the relevant commit in the companion repository._
+
+`test/components/TodoItem_spec.jsx`
+
+```javascript
+// ...
+// The Simulate helper allows us to simulate a user clicking
+const {
+  renderIntoDocument,
+  scryRenderedDOMComponentsWithTag,
+  Simulate
+} = TestUtils;
+
+describe("TodoItem", () => {
+  // ...
+  it("invokes callback when the delete button is clicked", () => {
+    const text = "React";
+    var deleted = false;
+    // We define a mock deleteItem function
+    const deleteItem = () => (deleted = true);
+    const component = renderIntoDocument(
+      <TodoItem text={text} deleteItem={deleteItem} />
+    );
+    const buttons = scryRenderedDOMComponentsWithTag(component, "button");
+    Simulate.click(buttons[0]);
+
+    // We verify that the deleteItem function has been called
+    expect(deleted).to.equal(true);
+  });
+});
+```
+
+To make this test pass, we must declare an `onClick` handler on the delete
+button that will call the `deleteItem` function passed in the props:
+
+`src/components/TodoItem.jsx`
+
+```javascript
+// ...
+export default class TodoItem extends React.Component {
+  render() {
+    // ...
+    return (
+      <li className={itemClass}>
+        <div className="view">
+          // ... // The onClick handler will call the deleteItem function given
+          in the props
+          <button
+            className="destroy"
+            onClick={() => this.props.deleteItem(this.props.id)}
+          ></button>
+        </div>
+        <TextInput />
+      </li>
+    );
+  }
+}
+```
+
+It is important to note that the actual logic for deleting the item has not been
+implemented yet: that will be the role of Redux.
+
+On the same model, we can test and imlement the following features:
+
+- A click on the checkbox should call the `toggleComplete` callback
+- A double click on the item label should call the `editItem` callback
+
+`test/components/TodoItem_spec.js`
+
+```javascript
+// ...
+describe("TodoItem", () => {
+  // ...
+  it("invokes callback when checkbox is clicked", () => {
+    const text = "React";
+    var isChecked = false;
+    const toggleComplete = () => (isChecked = true);
+    const component = renderIntoDocument(
+      <TodoItem text={text} toggleComplete={toggleComplete} />
+    );
+    const checkboxes = scryRenderedDOMComponentsWithTag(component, "input");
+    Simulate.click(checkboxes[0]);
+
+    expect(isChecked).to.equal(true);
+  });
+
+  it("calls a callback when text is double clicked", () => {
+    var text = "React";
+    const editItem = () => (text = "Redux");
+    const component = renderIntoDocument(
+      <TodoItem text={text} editItem={editItem} />
+    );
+    const label = component.refs.text;
+    Simulate.doubleClick(label);
+
+    expect(text).to.equal("Redux");
+  });
+});
+```
+
+`src/components/TodoItem.jsx`
+
+```javascript
+// ...
+render() {
+  // ...
+  return <li className={itemClass}>
+    <div className="view">
+      // We add an onClick handler on the checkbox
+      <input type="checkbox"
+             className="toggle"
+             defaultChecked={this.isCompleted()}
+             onClick={() => this.props.toggleComplete(this.props.id)}/>
+      // We add a ref attribute to the label to facilitate the testing
+      // The onDoubleClick handler is unsurprisingly called on double clicks
+      <label htmlFor="todo"
+             ref="text"
+             onDoubleClick={() => this.props.editItem(this.props.id)}>
+        {this.props.text}
+      </label>
+      <button className="destroy"
+              onClick={() => this.props.deleteItem(this.props.id)}></button>
+    </div>
+    <TextInput />
+  </li>
+```
+
+We also have to pass down the `editItem`, `deleteItem` and `toggleComplete` functions as props down from the `TodoList` component:
+
+`src/components/TodoList.jsx`
+
+```javascript
+// ...
+export default class TodoList extends React.Component {
+  // ...
+  render() {
+      return <section className="main">
+        <ul className="todo-list">
+          {this.getItems().map(item =>
+            <TodoItem key={item.get('text')}
+                      text={item.get('text')}
+                      isCompleted={this.isCompleted(item)}
+                      isEditing={item.get('editing')}
+                      // We pass down the callback functions
+                      toggleComplete={this.props.toggleComplete.}
+                      deleteItem={this.props.deleteItem}
+                      editItem={this.props.editItem}/>
+          )}
+        </ul>
+      </section>
+    }
+};
+```
+
+## Setting up the other components
+
+Now that you are a little more familiar with the process, and in order to keep
+the length of this article in reasonable constraints I invite you to have a look
+at the companion repository for the code responsible for the `TextInput` ([relevant commit](https://github.com/phacks/redux-todomvc/commit/8550a95fc589ecaa184367bb907c8dfeffc29d2f)), `TodoHeader` ([relevant commit](https://github.com/phacks/redux-todomvc/commit/cc97354bab0a0369f0c39b34ff24b44084a75ebb)) and `TodoTools` and `Footer` ([relevant commit](https://github.com/phacks/redux-todomvc/commit/237dbc36135427f3b5398f19fcc09ecb1e26d895)) components. If you have any question about those components please leave a comment here, or an issue on the repo!
+
+You may notice that some functions, such as `editItem`, `toggleComplete` and the like, have not yet been defined. They will be in the next part of this tutorial as Redux _actions_, so do not worry yet if your console start throwing some errors about those.
+
+## Wrap up
+
+In this article we have paved the way for our very first React, Redux and
+Immutable web app. Our UI is modular, fully tested and ready to be wired up with
+the actual app logic. How will that work? How can these seemingly _dumb_
+components, that don't even know what they are supposed to do, empower us to
+write an app that can travel back in time?
+
+Stay tuned for part two of the series that will follow shortly ;)
+
+_Originally published on the [Theodo Blog](https://blog.theodo.fr/2016/03/getting-started-with-react-redux-and-immutable-a-test-driven-tutorial-part-1/)._

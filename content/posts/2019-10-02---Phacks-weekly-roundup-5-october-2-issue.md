@@ -1,0 +1,38 @@
+---
+title: "Phacks’ weekly roundup #5 — October 2nd issue"
+date: "2018-10-02T10:40:32.169Z"
+template: "post"
+draft: false
+slug: "/posts/phacks-weekly-roundup-5-october-2-issue/"
+category: "Weekly Roundup"
+tags:
+  - "Weekly Roundup"
+  - "Web Development"
+description: "📖 A curated list of the most interesting reads, talks & libraries I stumbled upon last week."
+---
+
+## Talks
+
+**Powell Kinney: Elixir The Toyota Way**<br />
+Who better to apply the Toyota Way in software than, uh, Toyota? At the Elixir Conf, Powell Kinney explained how the lean principles from the Toyota manufacturing plants are embraced by the Toyota Connect software development teams. Thanks [@Tycho](https://twitter.com/TychoTa)!
+
+https://www.youtube.com/watch?v=37V6L1EA4ac
+
+## Articles
+
+**Sophie Alpert — [React 16: A look inside an API-compatible rewrite of our frontend UI library](https://engineering.fb.com/web/react-16-a-look-inside-an-api-compatible-rewrite-of-our-frontend-ui-library/)**<br />
+React 16 is out! Amazing news for the community, thanks to amazing work by the React Core developers. This article explains how they managed this huge rewrite of the React foundations using TDD & real-world testing.
+
+**Dan Abramov — [Error Handling in React 16](https://reactjs.org/blog/2017/07/26/error-handling-in-react-16.html)**<br />
+Along the many improvements React 16 brings (performance, async rendering…), better error handling may be the most useful for our day-to-day developer experience. Learn how Error Boundaries will help you track and fix bugs faster!
+
+**Mickael Jackson — [Use a Render Prop!](https://cdb.reacttraining.com/use-a-render-prop-50de598f11ce)**<br />
+Reusing code in React can be done in several ways. As mixins were deprecated a while ago, the Higher Order Component pattern (HoC) gained steam and is now widely used across major libraries (Redux, Apollo…). However, a new challenger is in town: the render props pattern, which has the advantage (imho) to make your codebase easier to reason about. If you’re interested, you can also read the docs PR’s comments — highly interesting discussion on that topic!
+
+**Philip Walton — [Deploying ES2015+ Code in Production Today](https://philipwalton.com/articles/deploying-es2015-code-in-production-today/)**<br />
+Although ES2015+ features (fetch, classes, arrow functions, modules…) are now supported in nearly all of the modern browsers, we usually ship all the necessary polyfills (usually through Babel) with our JS bundles to accommodate to older browsers. What if we could ship the polyfills only to those who actually need it? Read along!
+
+## Libraries
+
+**[Cupper](https://github.com/ThePacielloGroup/cupper)**<br />
+Cupper is a documentation builder for inclusive designers, and those who want to be inclusive designers.
