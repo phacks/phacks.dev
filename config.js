@@ -3,7 +3,7 @@
 module.exports = {
   url: "https://phacks.dev",
   pathPrefix: "/",
-  title: "Blog by Nicolas Goutay",
+  title: "Nicolas Goutay (@phacks)’s blog",
   subtitle: "Thoughts about Web Development, the JAMstack and other things.",
   copyright: "© All rights reserved.",
   disqusShortname: "",
