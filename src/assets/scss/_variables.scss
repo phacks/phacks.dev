@@ -4,8 +4,8 @@
 
 // Colors
 $color-base: #222;
-$color-primary: #5d93ff;
-$color-secondary: #f7a046;
+$color-primary: #ec1c3f;
+$color-secondary: #6e0d1d;
 
 $color-white: #fff;
 $color-gray: lighten($color-base, 40%);
@@ -13,11 +13,12 @@ $color-gray-border: lighten($color-base, 77%);
 $color-gray-bg: lighten($color-base, 79%);
 
 // Typographic
-$typographic-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-  Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+$typographic-font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont,
+  "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue",
+  sans-serif;
 
 $typographic-root-font-size: 100;
-$typographic-base-font-size: 16px;
+$typographic-base-font-size: 18px;
 $typographic-small-font-size: 14px;
 
 $typographic-base-line-height: 1.625;
@@ -27,7 +28,7 @@ $typographic-link-p-font-color: $color-primary;
 $typographic-link-s-font-color: $color-secondary;
 
 $typographic-leading: round(
-  16 * ($typographic-root-font-size / 100) * $typographic-base-line-height
+  18 * ($typographic-root-font-size / 100) * $typographic-base-line-height
 );
 
 // Buttons
