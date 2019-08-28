@@ -1,7 +1,7 @@
 ---
 template: post
 title: 'New blog, who dis?'
-slug: now-blog-who-dis
+slug: new-blog-who-dis
 draft: false
 date: 2019-08-28T20:52:51.861Z
 description: >-
