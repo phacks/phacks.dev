@@ -8,7 +8,7 @@ category: "Web Performance"
 tags:
   - "Web Performance"
   - "Lean IT"
-description: "Shawt! is a social, location-aware chat application. It gives you insights about what you want to know based on where you are."
+description: "In February, I teamed up with Kévin Jean, also a Software Architect, to improve the performance of our apps. We turned to Lean and Kaizen to make this happen."
 socialImage: "/media/doubling-the-number-of-performant-apps-using-kaizen/hero-image.jpg"
 ---
 
