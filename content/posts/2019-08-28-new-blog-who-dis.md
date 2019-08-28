@@ -2,7 +2,7 @@
 template: post
 title: 'New blog, who dis?'
 slug: now-blog-who-dis
-draft: true
+draft: false
 date: 2019-08-28T20:52:51.861Z
 description: >-
   After years of procrastinating, I finally came around to build myself a blog.
@@ -27,8 +27,10 @@ I’m planning to write about the JAMstack, Web Performance, the React ecosystem
 
 Additionally, I have an interesting Open Source project in the works that I might talk about pretty soon…
 
----
+- - -
 
 Being the organizer of the [JAMstack Paris meetup](https://jamstack.paris), you can bet that this blog is built on the JAMstack. I used this super-duper-cool [“Lumen” Gatsby Starter](https://github.com/alxshelepenok/gatsby-starter-lumen) by [Alexander Shelepenok](https://twitter.com/alxshelepenok), deployed it on [Netlify](https://netlify.com) and write/edit content using the open source [Netlify CMS](netlifycms.org).
+
+![Lighthouse score showing top score for Performance, Accessibility, Best Practices and SEO](/media/capture-d’écran-2019-08-28-à-23.31.15.png "Lighthouse score showing top score for Performance, Accessibility, Best Practices and SEO")
 
 It’s fast, accessible and deployed in a breeze. As my friend Matthieu said in [his talk](https://www.youtube.com/watch?v=cUgIeAS-9Do), “_the JAMstack is giving developers superpowers_”.
