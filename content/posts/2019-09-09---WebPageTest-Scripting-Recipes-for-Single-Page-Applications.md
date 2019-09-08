@@ -71,16 +71,22 @@ There are several ways of selecting a particular DOM elements using native brows
 
 If the element you want to select (say, an “Empty Cart” button) has a specific and unique `id` (e.g. `#empty-cart`), or class name, or is the only `button` on the page, then clicking on it straightforward:
 
-    const emptyCartButton = document.getElementsById("empty-cart")[0]
-    // or document.getElementsByClassName(".empty-cart-button")[0]
-    // of document.getElementsByTagName("button")[0]
-    emptyCartButton.click()
+```javascript
+const emptyCartButton = document.getElementsById("empty-cart")[0];
+// or document.getElementsByClassName(".empty-cart-button")[0]
+// of document.getElementsByTagName("button")[0]
+emptyCartButton.click();
+```
 
 If you have several `buttons` on the same page, you can filter the resulting list before interacting with the element:
 
-    const buttons = document.getElementsByTagName("button")
-    const emptyCartButton = buttons.filter((button) => button.innerText.includes("Empty Cart"))[0]
-    emptyCartButton.click()
+```javascript
+const buttons = document.getElementsByTagName("button");
+const emptyCartButton = buttons.filter(button =>
+  button.innerText.includes("Empty Cart")
+)[0];
+emptyCartButton.click();
+```
 
 ### Use complex CSS selectors
 
@@ -92,16 +98,18 @@ However, this solution can be out of reach sometimes: you may not have access to
 
 Here are a few examples of what can be achieved with `document.querySelector`:
 
-    // Select the first input with the `name="username"` property
-    document.querySelector("input[name='username']")
-    // Select all number inputs
-    document.querySelectorAll("input[type='number']")
+```javascript
+// Select the first input with the `name="username"` property
+document.querySelector("input[name='username']");
+// Select all number inputs
+document.querySelectorAll("input[type='number']");
 
-    // Select the first h1 inside the <section>
-    document.querySelector("section h1")
+// Select the first h1 inside the <section>
+document.querySelector("section h1");
 
-    // Select the first direct descendent of a <nav> which is of type <img>
-    document.querySelector("nav > img")
+// Select the first direct descendent of a <nav> which is of type <img>
+document.querySelector("nav > img");
+```
 
 What’s interesting here is you have at hand the full power of CSS selectors. I encourage you to have a look at the always-useful MDN’s [reference table of selectors](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors#Reference_table_of_selectors)!
 
@@ -111,8 +119,16 @@ What’s interesting here is you have at hand the full power of CSS selectors. I
 
 One such instance is when you want to select a node by its text value, and can’t resort to CSS selectors. Here’s a handy snippet that use in those cases:
 
-    // Returns the <span> that has the exact content 'Sep 16, 2015'
-    document.evaluate("//span[text()='Sep 16, 2015']", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+```javascript
+// Returns the <span> that has the exact content 'Sep 16, 2015'
+document.evaluate(
+  "//span[text()='Sep 16, 2015']",
+  document,
+  null,
+  XPathResult.FIRST_ORDERED_NODE_TYPE,
+  null
+).singleNodeValue;
+```
 
 I will not go into details on how to use it as it would have me wander far away from the goal of this article. To be fair, I don’t even know what many of the parameters above even mean. However, I can definitely recommend the [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Introduction_to_using_XPath_in_JavaScript) should you want to read a bit on the topic.
 
@@ -130,10 +146,12 @@ The authentication page of React Admin requires the user to input a username and
 
 Intuitively, one could take the following approach to filling in the form and submit:
 
-    const [usernameInput, passwordInput] = document.getElementsByTagName("input")
-    usernameInput.value = "demo" //innerText could also be used here
-    passwordInput.value = "demo"
-    document.getElementsByTagName("button")[0].click()
+```javascript
+const [usernameInput, passwordInput] = document.getElementsByTagName("input");
+usernameInput.value = "demo"; //innerText could also be used here
+passwordInput.value = "demo";
+document.getElementsByTagName("button")[0].click();
+```
 
 If you run this commands sequentially in a DevTools console on the login page, you will see that upon submitting by clicking the button, all fields are resetted and the login request will fail.
 
@@ -141,59 +159,65 @@ As mentioned in “Why is there a problem with testing Single Page Applications 
 
 What we need to do then it explicitely tell React that the value has changed so that it will update internal bookkeeping accordingly. This can be achieved using `Event`s.
 
-    const updateInputValue = (input, newValue) => {
-      let lastValue = input.value;
-      input.value = newValue;
-      let event = new Event("input", { bubbles: true });
-      let tracker = input._valueTracker;
-      if (tracker) {
-        tracker.setValue(lastValue);
-      }
-      input.dispatchEvent(event);
-    };
+```javascript
+const updateInputValue = (input, newValue) => {
+  let lastValue = input.value;
+  input.value = newValue;
+  let event = new Event("input", { bubbles: true });
+  let tracker = input._valueTracker;
+  if (tracker) {
+    tracker.setValue(lastValue);
+  }
+  input.dispatchEvent(event);
+};
+```
 
 _Note: this solution is pretty hacky ([even according to its own author](https://github.com/facebook/react/issues/11488#issuecomment-347775628)), however it works well for our purposes here_
 
 Our updated script becomes:
 
-    const updateInputValue = (input, newValue) => {
-      let lastValue = input.value;
-      input.value = newValue;
-      let event = new Event("input", { bubbles: true });
-      let tracker = input._valueTracker;
-      if (tracker) {
-        tracker.setValue(lastValue);
-      }
-      input.dispatchEvent(event);
-    };
+```javascript
+const updateInputValue = (input, newValue) => {
+  let lastValue = input.value;
+  input.value = newValue;
+  let event = new Event("input", { bubbles: true });
+  let tracker = input._valueTracker;
+  if (tracker) {
+    tracker.setValue(lastValue);
+  }
+  input.dispatchEvent(event);
+};
 
-    const [usernameInput, passwordInput] = document.getElementsByTagName("input")
+const [usernameInput, passwordInput] = document.getElementsByTagName("input");
 
-    updateInputValue(usernameInput, "demo")
-    updateInputValue(passwordInput, "demo")
+updateInputValue(usernameInput, "demo");
+updateInputValue(passwordInput, "demo");
 
-    document.getElementsByTagName("button")[0].click()
+document.getElementsByTagName("button")[0].click();
+```
 
 Hurrah! You can try it in your console, it works like a charm.
 
 Translating this to an actual WebPageTest script (with [scripting keywords, single line commands and tab-separated parameters](https://sites.google.com/a/webpagetest.org/docs/using-webpagetest/scripting)) would look like this:
 
-    setEventName	Go to Login
+```javascript
+setEventName	Go to Login
 
 
-    navigate	https://marmelab.com/react-admin-demo/
+navigate	https://marmelab.com/react-admin-demo/
 
-    setEventName	Login
+setEventName	Login
 
 
-    exec	const updateInputValue = (input, newValue) => {  let lastValue = input.value;  input.value = newValue;  let event = new Event("input", { bubbles: true });  let tracker = input._valueTracker;  if (tracker) {    tracker.setValue(lastValue);  }  input.dispatchEvent(event);};
+exec	const updateInputValue = (input, newValue) => {  let lastValue = input.value;  input.value = newValue;  let event = new Event("input", { bubbles: true });  let tracker = input._valueTracker;  if (tracker) {    tracker.setValue(lastValue);  }  input.dispatchEvent(event);};
 
-    exec	const [usernameInput, passwordInput] = document.getElementsByTagName("input")
+exec	const [usernameInput, passwordInput] = document.getElementsByTagName("input")
 
-    exec	updateInputValue(usernameInput, "demo")
-    exec	updateInputValue(passwordInput, "demo")
+exec	updateInputValue(usernameInput, "demo")
+exec	updateInputValue(passwordInput, "demo")
 
-    execAndWait	document.getElementsByTagName("button")[0].click()
+execAndWait	document.getElementsByTagName("button")[0].click()
+```
 
 Note that as clicking on the submit button leads us to a new page and triggers API calls, we need to use the `execAndWait` command.
 
@@ -201,7 +225,7 @@ You can see the full results of the test at [this address](https://www.webpagete
 
 Here is a short video (captured by WebPageTest) in which you can see that we indeed pass the authentication step:
 
-<video controls width="250">
+<video controls width="400">
     <source src="/media/webpagetest-scripting-recipes-for-single-page-applications/wpt-login-successful.mp4"
             type="video/mp4">
 
@@ -228,28 +252,30 @@ A user would typically click on the Reviews item on the left-hand navigation men
 
 As both clicks lead to page transition and API calls (to fetch the reviews), we need to use the `execAndWait` keyword for the script:
 
-    setEventName	Go to Login
+```javascript
+setEventName	Go to Login
 
-    navigate	https://marmelab.com/react-admin-demo/
+navigate	https://marmelab.com/react-admin-demo/
 
-    setEventName	Login
+setEventName	Login
 
-    exec	const updateInputValue = (input, newValue) => {  let lastValue = input.value;  input.value = newValue;  let event = new Event("input", { bubbles: true });  let tracker = input._valueTracker;  if (tracker) {    tracker.setValue(lastValue);  }  input.dispatchEvent(event);};
+exec	const updateInputValue = (input, newValue) => {  let lastValue = input.value;  input.value = newValue;  let event = new Event("input", { bubbles: true });  let tracker = input._valueTracker;  if (tracker) {    tracker.setValue(lastValue);  }  input.dispatchEvent(event);};
 
-    exec	const [usernameInput, passwordInput] = document.getElementsByTagName("input")
+exec	const [usernameInput, passwordInput] = document.getElementsByTagName("input")
 
-    exec	updateInputValue(usernameInput, "demo")
-    exec	updateInputValue(passwordInput, "demo")
+exec	updateInputValue(usernameInput, "demo")
+exec	updateInputValue(passwordInput, "demo")
 
-    execAndWait	document.getElementsByTagName("button")[0].click()
+execAndWait	document.getElementsByTagName("button")[0].click()
 
-    setEventName	Go to Reviews
+setEventName	Go to Reviews
 
-    execAndWait	document.querySelector("a[href='#/reviews']").click()
+execAndWait	document.querySelector("a[href='#/reviews']").click()
 
-    setEventName	Open a single Review
+setEventName	Open a single Review
 
-    execAndWait	document.querySelector("table tbody tr").click()
+execAndWait	document.querySelector("table tbody tr").click()
+```
 
 ## What about IE 11 compatibility?
 
@@ -262,76 +288,82 @@ This is due to two reasons:
 
 The ES6 syntax problem can easily be overcome by translating our scripts to ES5 syntax (no arrow functions, no `let` and `const`, no array destructuring) and might look like this:
 
-    setEventName	Go to Login
+```javascript
+setEventName	Go to Login
 
-    navigate	https://marmelab.com/react-admin-demo/
+navigate	https://marmelab.com/react-admin-demo/
 
-    setEventName	Login
+setEventName	Login
 
-    exec	var updateInputValue = (input, newValue) => {  var lastValue = input.value;  input.value = newValue;  var event = new Event("input", { bubbles: true });  var tracker = input._valueTracker;  if (tracker) {    tracker.setValue(lastValue);  }  input.dispatchEvent(event);};
+exec	var updateInputValue = (input, newValue) => {  var lastValue = input.value;  input.value = newValue;  var event = new Event("input", { bubbles: true });  var tracker = input._valueTracker;  if (tracker) {    tracker.setValue(lastValue);  }  input.dispatchEvent(event);};
 
-    exec	var usernameInput = document.getElementsByTagName("input")[0]
-    exec	var passwordInput = document.getElementsByTagName("input")[1]
+exec	var usernameInput = document.getElementsByTagName("input")[0]
+exec	var passwordInput = document.getElementsByTagName("input")[1]
 
-    exec	updateInputValue(usernameInput, "demo")
-    exec	updateInputValue(passwordInput, "demo")
+exec	updateInputValue(usernameInput, "demo")
+exec	updateInputValue(passwordInput, "demo")
 
-    execAndWait	document.getElementsByTagName("button")[0].click()
+execAndWait	document.getElementsByTagName("button")[0].click()
 
-    setEventName	Go to Reviews
+setEventName	Go to Reviews
 
-    execAndWait	document.querySelector("a[href='#/reviews']").click()
+execAndWait	document.querySelector("a[href='#/reviews']").click()
 
-    setEventName	Open a single Review
+setEventName	Open a single Review
 
-    execAndWait	document.querySelector("table tbody tr").click()
+execAndWait	document.querySelector("table tbody tr").click()
+```
 
 In order to bypass the absence of CustomEvent support, we can turn to Polyfills and add one manually at the top of the script. This Polyfill is available on [MDN](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent):
 
-    (function() {
-      if (typeof window.CustomEvent === "function") return false;
-      function CustomEvent(event, params) {
-        params = params || { bubbles: false, cancelable: false, detail: undefined };
-        var evt = document.createEvent("CustomEvent");
-        evt.initCustomEvent(
-          event,
-          params.bubbles,
-          params.cancelable,
-          params.detail
-        );
-        return evt;
-      }
-      CustomEvent.prototype = window.Event.prototype;
-      window.CustomEvent = CustomEvent;
-    })();
+```javascript
+(function() {
+  if (typeof window.CustomEvent === "function") return false;
+  function CustomEvent(event, params) {
+    params = params || { bubbles: false, cancelable: false, detail: undefined };
+    var evt = document.createEvent("CustomEvent");
+    evt.initCustomEvent(
+      event,
+      params.bubbles,
+      params.cancelable,
+      params.detail
+    );
+    return evt;
+  }
+  CustomEvent.prototype = window.Event.prototype;
+  window.CustomEvent = CustomEvent;
+})();
+```
 
 We can then replace all mentions of `Event` by `CustomEvent`, set the polyfill to be single line and we are good to go!
 
-    setEventName	Go to Login
+```javascript
+setEventName	Go to Login
 
-    navigate	https://marmelab.com/react-admin-demo/
+navigate	https://marmelab.com/react-admin-demo/
 
-    exec	(function(){if(typeof window.CustomEvent==="function")return false;function CustomEvent(event,params){params=params||{bubbles:false,cancelable:false,detail:undefined};var evt=document.createEvent("CustomEvent");evt.initCustomEvent(event,params.bubbles,params.cancelable,params.detail);return evt}CustomEvent.prototype=window.Event.prototype;window.CustomEvent=CustomEvent})();
+exec	(function(){if(typeof window.CustomEvent==="function")return false;function CustomEvent(event,params){params=params||{bubbles:false,cancelable:false,detail:undefined};var evt=document.createEvent("CustomEvent");evt.initCustomEvent(event,params.bubbles,params.cancelable,params.detail);return evt}CustomEvent.prototype=window.Event.prototype;window.CustomEvent=CustomEvent})();
 
-    setEventName	Login
+setEventName	Login
 
-    exec	var updateInputValue = (input, newValue) => {  var lastValue = input.value;  input.value = newValue;  var event = new CustomEvent("input", { bubbles: true });  var tracker = input._valueTracker;  if (tracker) {    tracker.setValue(lastValue);  }  input.dispatchEvent(event);};
+exec	var updateInputValue = (input, newValue) => {  var lastValue = input.value;  input.value = newValue;  var event = new CustomEvent("input", { bubbles: true });  var tracker = input._valueTracker;  if (tracker) {    tracker.setValue(lastValue);  }  input.dispatchEvent(event);};
 
-    exec	var usernameInput = document.getElementsByTagName("input")[0]
-    exec	var passwordInput = document.getElementsByTagName("input")[1]
+exec	var usernameInput = document.getElementsByTagName("input")[0]
+exec	var passwordInput = document.getElementsByTagName("input")[1]
 
-    exec	updateInputValue(usernameInput, "demo")
-    exec	updateInputValue(passwordInput, "demo")
+exec	updateInputValue(usernameInput, "demo")
+exec	updateInputValue(passwordInput, "demo")
 
-    execAndWait	document.getElementsByTagName("button")[0].click()
+execAndWait	document.getElementsByTagName("button")[0].click()
 
-    setEventName	Go to Reviews
+setEventName	Go to Reviews
 
-    execAndWait	document.querySelector("a[href='#/reviews']").click()
+execAndWait	document.querySelector("a[href='#/reviews']").click()
 
-    setEventName	Open a single Review
+setEventName	Open a single Review
 
-    execAndWait	document.querySelector("table tbody tr").click()
+execAndWait	document.querySelector("table tbody tr").click()
+```
 
 _Et voilà!_
 
