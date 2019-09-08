@@ -44,6 +44,7 @@ _If you are curious about Web Performance and want a good introduction to WebPag
 - [What about IE 11 compatibility?](#what-about-ie-11-compatibility)
 - [General tips and tricks for WebPageTest scripting](#general-tips-and-tricks-for-webpagetest-scripting)
   - [Security first!](#security-first)
+  - [Long loading states](#long-loading-states)
   - [Keeping your script (and results) human-readable](#keeping-your-script-and-results-human-readable)
   - [Iterating on your scripts](#iterating-on-your-scripts)
   - [Tips and tricks from around the internet](#tips-and-tricks-from-around-the-internet)
@@ -378,6 +379,16 @@ To close this article, I wanted to give a few tips and tricks I use to make writ
 Remember to tick both privacy checkboxes if your script includes sentitive data, like credentials!
 
 ![WebPageTest security controls](/media/webpagetest-scripting-recipes-for-single-page-applications/wpt-security.png)
+
+### Long loading states
+
+Sometimes, a remote API Call (say, for fetching the reviews) will take a long time. A loading indicator such as a spinner can be used to tell the user to wait a bit as _something is happening_.
+
+WebPageTest tries to detect when a page has finished loading by figuring out if things are changing on the screen. If your loading indicator lasts a long time, WebPageTest might mistake it for an integral part of your page and cut the audit before the API call ends — thus truncating your measures.
+
+A way to circumvent this issue is to tell WebPageTest to wait _at least_ a certain duration before stopping the test. This is a parameter available under the “Advanced” tab:
+
+![WebPageTest minimum test duration](/media/webpagetest-scripting-recipes-for-single-page-applications/wpt-minimum-test-duration.png)
 
 ### Keeping your script (and results) human-readable
 

@@ -17,7 +17,6 @@ pre[class*="language-"] {
   -moz-hyphens: none;
   -ms-hyphens: none;
   hyphens: none;
-  width: 120%;
   align-self: center;
 }
 code[class*="language-"] ::-moz-selection,
