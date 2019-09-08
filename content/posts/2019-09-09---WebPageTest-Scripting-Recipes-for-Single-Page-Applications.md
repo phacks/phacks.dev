@@ -2,7 +2,7 @@
 title: "WebPageTest Scripting — Recipes for Single Page Applications"
 date: "2019-09-09T10:40:32.169Z"
 template: "post"
-draft: false
+draft: true
 slug: "/posts/webpagetest-scripting-recipes-for-single-page-applications/"
 category: "Web Performance"
 tags:
