@@ -297,7 +297,7 @@ navigate	https://marmelab.com/react-admin-demo/
 
 setEventName	Login
 
-exec	var updateInputValue = (input, newValue) => {  var lastValue = input.value;  input.value = newValue;  var event = new Event("input", { bubbles: true });  var tracker = input._valueTracker;  if (tracker) {    tracker.setValue(lastValue);  }  input.dispatchEvent(event);};
+exec	var updateInputValue = function(input, newValue) {  var lastValue = input.value;  input.value = newValue;  var event = new Event("input", { bubbles: true });  var tracker = input._valueTracker;  if (tracker) {    tracker.setValue(lastValue);  }  input.dispatchEvent(event);};
 
 exec	var usernameInput = document.getElementsByTagName("input")[0]
 exec	var passwordInput = document.getElementsByTagName("input")[1]
@@ -348,7 +348,7 @@ exec	(function(){if(typeof window.CustomEvent==="function")return false;function
 
 setEventName	Login
 
-exec	var updateInputValue = (input, newValue) => {  var lastValue = input.value;  input.value = newValue;  var event = new CustomEvent("input", { bubbles: true });  var tracker = input._valueTracker;  if (tracker) {    tracker.setValue(lastValue);  }  input.dispatchEvent(event);};
+exec	var updateInputValue = function(input, newValue) {  var lastValue = input.value;  input.value = newValue;  var event = new CustomEvent("input", { bubbles: true });  var tracker = input._valueTracker;  if (tracker) {    tracker.setValue(lastValue);  }  input.dispatchEvent(event);};
 
 exec	var usernameInput = document.getElementsByTagName("input")[0]
 exec	var passwordInput = document.getElementsByTagName("input")[1]
