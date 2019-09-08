@@ -1,5 +1,5 @@
 ---
-title: "WebPageTest Scripting — Recipes for Single Page Applications."
+title: "WebPageTest Scripting — Recipes for Single Page Applications"
 date: "2019-09-09T10:40:32.169Z"
 template: "post"
 draft: false
@@ -7,7 +7,7 @@ slug: "/posts/webpagetest-scripting-recipes-for-single-page-applications/"
 category: "Web Performance"
 tags:
   - "Web Performance"
-description: "Using WebPageTest scripts to analyze and monitor the performance of Single Page Applications"
+description: "Using WebPageTest scripts to analyze and monitor the performance of Single Page Applications."
 ---
 
 WebPageTest is an [online tool](https://www.webpagetest.org/) and an [Open Source project](https://github.com/WPO-Foundation/webpagetest) to help developers audit the performance of their websites.
@@ -52,7 +52,7 @@ _If you are curious about Web Performance and want a good introduction to WebPag
 
 Single Page Applications radically changed the way websites work: instead of letting the backend (be it Django, Rails, Laravel…) do most of the grunt work and delivering “ready-to-use” HTML to the browser, SPAs rely heavily on JavaScript (and frontend frameworks) to have the browser compute the resulting HTML from JavaScript code.
 
-Some of the problems can arise from that paradigm shift when using WebPageTest:
+Some problems can arise from that paradigm shift when using WebPageTest:
 
 - Clicking around to navigate a webpage is usually harder than merely heading to a new URL, but it is sometimes the only option in SPAs;
 - Authentication in SPAs is usually implemented using JWTs instead of the good ol’ cookies, which rules out the option of setting authentication cookies (as described [here](https://calendar.perfplanet.com/2015/using-webpagetest-authentication/));
@@ -63,9 +63,9 @@ As I have faced this problems on several projects, I have come up with a range o
 
 ## The many ways of selecting an element
 
-Selecting DOM elements is a key part of doing all sorts of automated testing, be it for end-to-end testing with Selenium or Cypress or for performance testing with WebPageTest. Selecting DOM elements allows us to click on links and buttons, fill in forms and more generally interact with the application.
+Selecting DOM elements is a key part of doing all sorts of automated testing, be it for end-to-end testing with [Selenium](https://www.seleniumhq.org/) or [Cypress](https://www.cypress.io/) or for performance testing with WebPageTest. Selecting DOM elements allows us to click on links and buttons, fill in forms and more generally interact with the application.
 
-There are several ways of selecting a particular DOM elements using native browser APIs, that range from the really easy to use `document.getElementsByClassName` to the hairy but really powerful XPath selectors. In this section, we will see three different possibilities, ordered by growing complexity.
+There are several ways of selecting a particular DOM elements using native browser APIs, that ranges from the really easy to use `document.getElementsByClassName` to the hairy but really powerful XPath selectors. In this section, we will see three different possibilities, ordered by growing complexity.
 
 ### Get an element by `id`, `className` or `tagName`
 
@@ -94,7 +94,7 @@ Sometimes, the particular element you want to interact with does not present an 
 
 One way to circumvent this issue is to add this unicity manually, for testing purposes only. Adding `#perf-test-empty-cart-button` to the specific button is quite innocuous for your website markup and can dramatically simplify your testing setup.
 
-However, this solution can be out of reach sometimes: you may not have access to the source code of the application for example, or not be able to deploy quickly. In those situations, it can be useful to know about `document.querySelector` (and its cousin `document.querySelectorAll`) and using complex CSS selectors.
+However, this solution can be out of reach sometimes: you may not have access to the source code of the application, or not be able to deploy quickly. In those situations, it can be useful to know about `document.querySelector` (and its cousin `document.querySelectorAll`) and using complex CSS selectors.
 
 Here are a few examples of what can be achieved with `document.querySelector`:
 
@@ -136,7 +136,7 @@ I will not go into details on how to use it as it would have me wander far away 
 
 In order to illustrate those recipes, I will use the [React Admin demo](https://marmelab.com/react-admin-demo/) website as an example. [React Admin](https://github.com/marmelab/react-admin) is an open source project aimed at building admin application.
 
-I find it a typical example of a Single Page Application because it uses React (as the name suggest), has a login interface, many forms and client-side routing. I encourage you to go take a quick look at the website (the demo account is `demo/demo` ) in order to have an idea of what we will be trying to achieve.
+I think it is a typical example of a Single Page Application because it uses React (as the name suggest), calls remote APIs, has a login interface, many forms and client-side routing. I encourage you to go [take a quick look at the website](<(https://marmelab.com/react-admin-demo/)>) (the demo account is `demo/demo` ) in order to have an idea of what we will be trying to achieve.
 
 ### Authentication and Forms
 
@@ -155,7 +155,7 @@ document.getElementsByTagName("button")[0].click();
 
 If you run this commands sequentially in a DevTools console on the login page, you will see that upon submitting by clicking the button, all fields are resetted and the login request will fail.
 
-As mentioned in “Why is there a problem with testing Single Page Applications with WebPageTest?”, the problem comes from the fact that the new values that we set with `.value` (or `innerText`) are not kicked back to the Redux store, and thus not “processed” by the application.
+As mentioned in [“Why is there a problem with testing Single Page Applications with WebPageTest?”](#why-is-there-a-problem-with-testing-single-page-applications-with-webpagetest), the problem comes from the fact that the new values that we set with `.value` (or `.innerText`) are not kicked back to the Redux store, and thus not “processed” by the application.
 
 What we need to do then it explicitely tell React that the value has changed so that it will update internal bookkeeping accordingly. This can be achieved using `Event`s.
 
@@ -221,9 +221,9 @@ execAndWait	document.getElementsByTagName("button")[0].click()
 
 Note that as clicking on the submit button leads us to a new page and triggers API calls, we need to use the `execAndWait` command.
 
-You can see the full results of the test at [this address](https://www.webpagetest.org/result/190908_WY_755b1e0eb1c0f9e6aaef27d38594349b/) (caution: the results may be archived by WebPageTest, you can however run the test again!).
+You can see the full results of the test at [this address](https://www.webpagetest.org/result/190908_WY_755b1e0eb1c0f9e6aaef27d38594349b/) (caution: the results may have been archived by WebPageTest, you can however run the test again yourself!).
 
-Here is a short video (captured by WebPageTest) in which you can see that we indeed pass the authentication step:
+Here is a short video (captured by WebPageTest) in which you can see that we indeed passed the authentication step:
 
 <video controls width="400">
     <source src="/media/webpagetest-scripting-recipes-for-single-page-applications/wpt-login-successful.mp4"
@@ -247,8 +247,10 @@ Let’s follow through our previous example, although now say we want to test th
 
 A user would typically click on the Reviews item on the left-hand navigation menu, and then on any item in the list. Inspecting the elements in the DevTools may lead us to a selection strategy as follows:
 
-    document.querySelector("a[href='#reviews'") // select the Reviews link in the menu
-    document.querySelector("table tr") // select the first item in the Reviews list
+```javascript
+document.querySelector("a[href='#reviews'"); // select the Reviews link in the menu
+document.querySelector("table tr"); // select the first item in the Reviews list
+```
 
 As both clicks lead to page transition and API calls (to fetch the reviews), we need to use the `execAndWait` keyword for the script:
 
@@ -284,9 +286,9 @@ WebPageTest allows us to select from which location, browser and network conditi
 This is due to two reasons:
 
 - We are using ES6 syntax (e.g. arrow function), which is not [100% supported by IE 11](https://caniuse.com/#search=function)
-- The CustomEvent API we used for handling forms [is not supported by IE11](https://caniuse.com/#feat=customevent)
+- The CustomEvent API we use for handling forms [is not supported by IE11](https://caniuse.com/#feat=customevent)
 
-The ES6 syntax problem can easily be overcome by translating our scripts to ES5 syntax (no arrow functions, no `let` and `const`, no array destructuring) and might look like this:
+The ES6 syntax problem can easily be overcome by translating our scripts to ES5 syntax (no arrow functions, no `let` and `const`, no array destructuring), which might look like this:
 
 ```javascript
 setEventName	Go to Login
@@ -335,7 +337,7 @@ In order to bypass the absence of CustomEvent support, we can turn to Polyfills 
 })();
 ```
 
-We can then replace all mentions of `Event` by `CustomEvent`, set the polyfill to be single line and we are good to go!
+We can then replace all mentions of `Event` by `CustomEvent`, set the polyfill to fit on a single line and we are good to go!
 
 ```javascript
 setEventName	Go to Login
@@ -392,5 +394,7 @@ Remember to tick both privacy checkboxes if your script includes sentitive data,
 
 - [Experimenting With Link Rel=preconnect Using Custom Script Injection in WebPageTest](https://andydavies.me/blog/2019/08/07/experimenting-with-link-rel-equals-preconnect-using-custom-script-injection-in-webpagetest/) by [Andy Davies](https://twitter.com/AndyDavies)
 - [Authenticating with Cookies](https://calendar.perfplanet.com/2015/using-webpagetest-authentication/) by [Rick Viscomi](https://twitter.com/rick_viscomi)
+
+---
 
 If you liked this article, you may want to [follow me on Twitter](https://twitter.com/phacks) for more content about Web Performance and WebPageTest ✌️
