@@ -75,6 +75,11 @@
         @include line-height(1.125);
         @include margin-bottom(1.125);
       }
+
+      & ul p {
+        @include margin-bottom(0.5);
+        @include line-height(1);
+      }
     }
   }
 }

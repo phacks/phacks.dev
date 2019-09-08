@@ -16,7 +16,7 @@ As a Web Performance Evangelist at [Theodo](https://www.theodo.fr/), I use it ev
 
 I mean, look at how adamant [Brad Frost](http://bradfrost.com/) is about it:
 
-[https://twitter.com/brad_frost/status/1107714993703788544](https://twitter.com/brad_frost/status/1107714993703788544)
+https://twitter.com/brad_frost/status/1107714993703788544
 
 WebPageTest is really straightforward to configure and run for “static”, public-facing webpages: just enter the URL, pick your audit environment and you’re good to go.
 
@@ -235,7 +235,7 @@ Here is a short video (captured by WebPageTest) in which you can see that we ind
 
 ### Navigating between pages
 
-For traditional Server Rendered pages, to navigate from one to the next in WebPageTest scripting is done via the `navigate<tab>mywebsite.com/myotherpage` command.
+For traditional Server Rendered pages, to navigate from one to the next in WebPageTest scripting is done via the `navigate mywebsite.com/myotherpage` command.
 
 Hovever, for Single Page Apps this does not reflect the experience of the user, as client-side routing means that the server has no role in the navigation. Thus, hitting directly an URL would significantly slow down the measured performance (because of the time it takes for the JS framework to be executed), a slowdown that the user does not experience.
 

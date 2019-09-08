@@ -123,6 +123,12 @@ ul {
     padding: 0 5px;
     margin-bottom: 10px;
   }
+
+  & p,
+  ul {
+    margin-bottom: 5px;
+    margin-top: 0px;
+  }
 }
 
 p {
@@ -150,6 +156,12 @@ figcaption {
   font-style: italic;
   margin-bottom: 0;
   text-align: center;
+}
+
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
 
 .anchor {
