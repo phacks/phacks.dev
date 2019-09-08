@@ -1,6 +1,6 @@
 ---
 template: post
-title: 'New blog, who dis?'
+title: "New blog, who dis?"
 slug: new-blog-who-dis
 draft: false
 date: 2019-08-28T20:52:51.861Z
@@ -11,6 +11,7 @@ category: Web Development
 tags:
   - Web Development
 ---
+
 I finally came around to build myself a blog.
 
 I had the project in the back of my mind for a few years now. I wrote content on many different platforms over the last 5 years (be it [Svbtle](https://shawt.svbtle.com), [Medium](https://medium.com/@phacks) or [Twitter](https://twitter.com/phacks)), and I wanted to have single place to have it all. My own place. Far from [paywalls](https://www.theregister.co.uk/2017/03/24/medium_five_bucks_a_month_for_nothing/) and [annoying marketing banners](https://medium.com/@nikitonsky/medium-is-a-poor-choice-for-blogging-bb0048d19133) prompting me to install the damn app.
@@ -19,7 +20,7 @@ So this is it! It was a fun process to go back to and re-read my old articles.
 
 [This series](https://phacks.dev/category/personal-projects/) is about _Shawt_, a school project I did for my Masters Degree and my first “real” web app. It was a real-time, student-focused classified ads web app. Funnily enough, another application called [Shout](https://techcrunch.com/2015/01/23/shout-offers-a-new-take-on-location-based-social-networking-by-ditching-anonymity/), a real-time classified ads with a similar looking interface, [raised a few millions](https://www.crunchbase.com/organization/shout-app) a year later in San Francisco. _Anyway_.
 
-[This article](https://phacks.dev/posts/how-grigori-perelman-solved-one-of-maths-greatest-mystery/) is my personal favourite. It’s a short biography of, I believe, one of the most intriguing and fascinating person on the planet. Grigori Perelman solved one of Maths greatest mystery, which resisted generations of mathematicians. A $1,000,000 mystery. And he refused the money, and the prize that went along with it.
+[This article](https://phacks.dev/posts/how-grigori-perelman-solved-one-of-maths-greatest-mystery/) is my personal favourite. It’s a short biography of, I believe, one of the most intriguing and fascinating person on the planet. Grigori Perelman solved one of Maths greatest mystery, which resisted generations of mathematicians. A \$1,000,000 mystery. And he refused the money, and the prize that went along with it.
 
 I also did [this series](https://phacks.dev/category/weekly-roundup/) of newsletter-like “weekly roundups”, in which I compiled my favourite talks, articles and libraries of the week. And mind you, most of them are still damn relevant more than one year later!
 
@@ -27,10 +28,10 @@ I’m planning to write about the JAMstack, Web Performance, the React ecosystem
 
 Additionally, I have an interesting Open Source project in the works that I might talk about pretty soon…
 
-- - -
+---
 
 Being the organizer of the [JAMstack Paris meetup](https://jamstack.paris), you can bet that this blog is built on the JAMstack. I used this super-duper-cool [“Lumen” Gatsby Starter](https://github.com/alxshelepenok/gatsby-starter-lumen) by [Alexander Shelepenok](https://twitter.com/alxshelepenok), deployed it on [Netlify](https://netlify.com) and write/edit content using the open source [Netlify CMS](https://netlifycms.org). It’s typeset with [IBM Plex](https://www.ibm.com/plex/), a beautiful, open source typeface released by IBM.
 
-![Lighthouse score showing top score for Performance, Accessibility, Best Practices and SEO](/media/capture-d’écran-2019-08-28-à-23.31.15.png "Lighthouse score showing top score for Performance, Accessibility, Best Practices and SEO")
+![Lighthouse score showing top scores for Performance, Accessibility, Best Practices and SEO](/media/new-blog-who-dis/phacks-dev-lighthouse-results.png)
 
 It’s fast, accessible and deployed in a breeze. As my friend Matthieu said in [his talk](https://www.youtube.com/watch?v=cUgIeAS-9Do), “_the JAMstack is giving developers superpowers_”.
