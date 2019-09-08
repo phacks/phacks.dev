@@ -1,13 +1,15 @@
 ---
-title: "WebPageTest Scripting — Recipes for Single Page Applications"
-date: "2019-09-09T10:40:32.169Z"
-template: "post"
+template: post
+title: WebPageTest Scripting — Recipes for Single Page Applications
+slug: /posts/webpagetest-scripting-recipes-for-single-page-applications/
 draft: true
-slug: "/posts/webpagetest-scripting-recipes-for-single-page-applications/"
-category: "Web Performance"
+date: '2019-09-09T10:40:32.169Z'
+description: >-
+  Using WebPageTest scripts to analyze and monitor the performance of Single
+  Page Applications.
+category: Web Performance
 tags:
-  - "Web Performance"
-description: "Using WebPageTest scripts to analyze and monitor the performance of Single Page Applications."
+  - Web Performance
 ---
 
 WebPageTest is an [online tool](https://www.webpagetest.org/) and an [Open Source project](https://github.com/WPO-Foundation/webpagetest) to help developers audit the performance of their websites.
@@ -44,6 +46,7 @@ _If you are curious about Web Performance and want a good introduction to WebPag
 - [What about IE 11 compatibility?](#what-about-ie-11-compatibility)
 - [General tips and tricks for WebPageTest scripting](#general-tips-and-tricks-for-webpagetest-scripting)
   - [Security first!](#security-first)
+  - [Browse the docs](#browse-the-docs)
   - [Long loading states](#long-loading-states)
   - [Keeping your script (and results) human-readable](#keeping-your-script-and-results-human-readable)
   - [Iterating on your scripts](#iterating-on-your-scripts)
@@ -379,6 +382,12 @@ To close this article, I wanted to give a few tips and tricks I use to make writ
 Remember to tick both privacy checkboxes if your script includes sentitive data, like credentials!
 
 ![WebPageTest security controls](/media/webpagetest-scripting-recipes-for-single-page-applications/wpt-security.png)
+
+### Browse the docs
+
+The WebPageTest Scripting docs is full of features that I didn’t cover in this article, ranging from DNS Overriding to iPhone Spoofing and even `if/else` conditionals!
+
+When you plan on writing a new script, I recommend you have a look at the avaiable parameters first and see if any can help make your scripting easier or more robust.
 
 ### Long loading states
 
