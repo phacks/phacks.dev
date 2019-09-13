@@ -2,8 +2,8 @@
 template: post
 title: WebPageTest Scripting — Recipes for Single Page Applications
 slug: /posts/webpagetest-scripting-recipes-for-single-page-applications/
-draft: true
-date: '2019-09-09T10:40:32.169Z'
+draft: false
+date: "2019-09-09T10:40:32.169Z"
 description: >-
   Using WebPageTest scripts to analyze and monitor the performance of Single
   Page Applications.
@@ -56,7 +56,31 @@ _If you are curious about Web Performance and want a good introduction to WebPag
 
 Single Page Applications radically changed the way websites work: instead of letting the backend (be it Django, Rails, Laravel…) do most of the grunt work and delivering “ready-to-use” HTML to the browser, SPAs rely heavily on JavaScript (and frontend frameworks) to have the browser compute the resulting HTML from JavaScript code.
 
-Some problems can arise from that paradigm shift when using WebPageTest:
+The simplicity of WebPageTest is what makes part of its appeal to developers: head to [http://webpagetest.org/easy](http://webpagetest.org/easy), enter your URL, wait a little and _voilà_! Your performance audit is ready.
+
+If you are building an SPA and want to measure its performance, you could rely on end-to-end testing tools like [Selenium](https://www.seleniumhq.org/), [Cypress](https://www.cypress.io/) or [Puppeteer](https://pptr.dev/). However, I have found that none of them offer the amount of performance-related information and easy-to-use tooling that WebPageTest offers.
+
+But testing SPAs with WebPageTest can be tricky.
+
+In many SPAs, most of the application is protected behind a login form. I use [Netlify](https://netlify.com) a lot for hosting my websites and blog, and most of the time I spend in the application is on authenticated pages, like the dashboard listing all my websites. As the information on my dashboard is specific to _me_, any other user trying to access [https://app.netlify.com/teams/phacks/sites](https://app.netlify.com/teams/phacks/sites) is not going to see my dashboard, but will instead be redirected to a login page (or a `404` one).
+
+The same goes for WebPageTest: if I enter _my_ dashboard URL into [http://webpagetest.org/easy](http://webpagetest.org/easy), the audit will actually be performed against the login page.
+
+![Auditing my dashboard page on Netlify fails](/media/webpagetest-scripting-recipes-for-single-page-applications/wpt-audit-netlify.png)
+
+In addition, testing and monitoring the performance of _dynamic interactions_ in SPAs cannot be achieved with simple WebPageTest audits. [Nuage](https://nuageapp.com) is a domain name registrar with fancy animations and a beautiful, dynamic interface. When you search for domain names to buy, an asynchronous call fetches the results of the request and the results are displayed as they are retrieved.
+
+<video controls width="400">
+    <source src="/media/webpagetest-scripting-recipes-for-single-page-applications/nuage-search.mp4"
+            type="video/mp4">
+
+    Sorry, your browser doesn't support embedded videos.
+
+</video>
+
+As you might have noticed in the video above, the URL of the page does not change when I typed my search terms. As a consequence, it is not possible to test the performance of the search _experience_ using a simple WebPageTest audit as we do not have a proper URL to point to the _action_ of searching something, only to an empty search _page_.
+
+Some other problems can arise from that paradigm shift when using WebPageTest:
 
 - Clicking around to navigate a webpage is usually harder than merely heading to a new URL, but it is sometimes the only option in SPAs;
 - Authentication in SPAs is usually implemented using JWTs instead of the good ol’ cookies, which rules out the option of setting authentication cookies (as described [here](https://calendar.perfplanet.com/2015/using-webpagetest-authentication/));
