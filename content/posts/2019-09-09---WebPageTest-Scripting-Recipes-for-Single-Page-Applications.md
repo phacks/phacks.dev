@@ -2,8 +2,8 @@
 template: post
 title: WebPageTest Scripting — Recipes for Single Page Applications
 slug: /posts/webpagetest-scripting-recipes-for-single-page-applications/
-draft: false
-date: "2019-09-09T10:40:32.169Z"
+draft: true
+date: '2019-09-09T10:40:32.169Z'
 description: >-
   Using WebPageTest scripts to analyze and monitor the performance of Single
   Page Applications.
