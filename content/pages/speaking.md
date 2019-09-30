@@ -19,6 +19,8 @@ If you feel like this applies to you, I would gladly help you on securing your n
 
 ### Upcoming talks
 
+**[GDG DevFest Wrocław](https://devfest.wroclaw.pl/)** — Getting your Team Passionate About Web Performance to Achieve Performant Web Apps
+
 **[GOTO Berlin](https://gotober.com/2019)** — Fast by Default: near instant load times at scale with GatsbyJS
 
 ### Previous talks
