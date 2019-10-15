@@ -60,7 +60,7 @@ There is little information out there on Cete as it’s under active development
 ![A screenshot of Kommunity’s “explore” page](/media/capture-d’écran-2019-10-15-à-13.41.27.png)
 
 * Availability: available now (it even looks like a big deal over in Turkey)
-* Business model: it _looks_ like it’s free, however I couldn’t find any Princing page or the underlying business model. To be taken with a grain of salt.
+* Business model: it _looks_ like it’s free, however I couldn’t find any Princing page or the underlying business model. To be taken with a grain of salt. Update: see [this tweet](https://twitter.com/EmirKarsiyakali/status/1184077599871516673) from the founder for more info.
 * Features:
   * ✅RSVP
   * ✅Event pages
