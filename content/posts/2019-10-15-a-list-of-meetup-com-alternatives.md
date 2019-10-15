@@ -14,7 +14,7 @@ tags:
 ---
 [Meetup.com](https://meetup.com) [just announced](https://www.meetup.com/lp/paymentchanges) that they are changing their business model, and will be imposing a $2 fee on attendees for each event. This is presumably a combined consequence of [WeWork acquiring Meetup](https://www.wework.com/newsroom/posts/wework-x-meetup) in 2017 and the [failed WeWork IPO](https://markets.businessinsider.com/news/stocks/wework-ipo-adam-neumann-business-model-valuation-2019-9-1028530754) earlier this year.
 
-**_Important update: Meetup updated the [payment changes](https://www.meetup.com/lp/paymentchanges) page with the following information:_**
+_**Important update: Meetup updated the [payment changes](https://www.meetup.com/lp/paymentchanges) page with the following information:**_
 
 “_Meetup is always looking for ways to improve the experience for everyone in our community. For the past several years, organizers have paid a subscription fee to create and manage groups on Meetup. One of the options we are currently exploring is whether to reduce the subscription costs for organizers and introduce a small event fee for members. This change will help more evenly distribute costs between organizers and members._
 
@@ -152,6 +152,17 @@ There is little information out there on Cete as it’s under active development
 
 * Availability: available
 * Business model: free for <100 attendees, monthly fee for more (see the [pricing page](https://introwise.com/pricing))
+* Features:
+  * ✅RSVP
+  * ✅Event pages
+  * ✅Mailing lists
+
+## Mixily
+
+![Screenshot of Mixily’s homepage](/media/capture-d’écran-2019-10-15-à-21.12.11.png)
+
+* Availability: available
+* Business model: free for free events, paid ticketing is in private beta, with pricing comparable to eventbrite. Contact [andrew@mixily.com](mailto:andrew@mixily.com) to join the ticketing beta.
 * Features:
   * ✅RSVP
   * ✅Event pages
