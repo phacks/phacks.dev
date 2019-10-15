@@ -93,4 +93,6 @@ There is little information out there on Cete as it’s under active development
   * ✅Event pages
   * ❌Mailing lists (not in the Beta, I couldn’t find the upcoming features)
 
+_Update: [@coderbyheart](https://twitter.com/coderbyheart) compiled a list of only Open Source alternatives (thanks for reaching out!), [available on GitHub](https://github.com/coderbyheart/open-source-meetup-alternatives)._
+
 I’ll update this page as I learn more about these alternatives. If you have other alternatives in mind, or have tried them and decided on one, please let me know [on my Twitter](https://twitter.com/phacks)!
