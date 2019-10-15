@@ -105,12 +105,12 @@ There is little information out there on Cete as it’s under active development
 
 ![Screenshot of Meetabit’s homepage](/media/capture-d’écran-2019-10-15-à-19.04.06.png)
 
-* Availability: available now for selected cities only
+* Availability: available now for selected cities only (you can tweet out to \[@meetabit](https://twitter.com/meetabit) for them to add yours)
 * Business model: free, ad-sponsored (à la Stack Overflow)
 * Features:
   * ✅RSVP
   * ✅Event pages
-  * ❌Mailing lists
+  * ✅Mailing lists
 
 ## [Eventbrite](https://www.eventbrite.com/)
 
@@ -122,6 +122,25 @@ There is little information out there on Cete as it’s under active development
   * ✅RSVP
   * ✅Event pages
   * ✅Mailing lists
+
+## [Colloq](https://colloq.io/)
+
+![Screenshot of Colloq’s explore page](/media/capture-d’écran-2019-10-15-à-19.30.52.png)
+
+* Availability: available now
+* Business model: freemium, see the [princing page](https://colloq.io/pricing)
+* Features:
+  * ✅RSVP
+  * ✅Event pages
+  * ✅Mailing lists
+
+## [Stoop](https://www.producthunt.com/upcoming/stoop-1)
+
+![A screenshot of Stoop’s homepage](/media/capture-d’écran-2019-10-15-à-19.36.36.png)
+
+* Availability: under active development, early access available
+* Features: not available
+* Business model: not available
 
 _Update: [@coderbyheart](https://twitter.com/coderbyheart) compiled a list of only Open Source alternatives (thanks for reaching out!), [available on GitHub](https://github.com/coderbyheart/open-source-meetup-alternatives)._
 
