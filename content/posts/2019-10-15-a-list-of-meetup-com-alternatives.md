@@ -14,7 +14,7 @@ tags:
 ---
 [Meetup.com](https://meetup.com) [just announced](https://www.meetup.com/lp/paymentchanges) that they are changing their business model, and will be imposing a $2 fee on attendees for each event. This is presumably a combined consequence of [WeWork acquiring Meetup](https://www.wework.com/newsroom/posts/wework-x-meetup) in 2017 and the [failed WeWork IPO](https://markets.businessinsider.com/news/stocks/wework-ipo-adam-neumann-business-model-valuation-2019-9-1028530754) earlier this year.
 
-_**Important update: Meetup updated the [payment changes](https://www.meetup.com/lp/paymentchanges) page with the following information:**_
+**_Important update: Meetup updated the [payment changes](https://www.meetup.com/lp/paymentchanges) page with the following information:_**
 
 “_Meetup is always looking for ways to improve the experience for everyone in our community. For the past several years, organizers have paid a subscription fee to create and manage groups on Meetup. One of the options we are currently exploring is whether to reduce the subscription costs for organizers and introduce a small event fee for members. This change will help more evenly distribute costs between organizers and members._
 
@@ -61,7 +61,7 @@ There is little information out there on Cete as it’s under active development
   * Up to 2000 Attendees: $100/month or $1000/year
   * Up to 3000 Attendees: $150/month or $1500/year
   * Up to 4000 Attendees: $200/month or $2000/year
-  * More than 4,000 attendees? Contact us for details.
+  * More than 4,000 attendees: you would have to contact them
 * Features:
   * ✅RSVP
   * ✅Event pages
@@ -143,9 +143,20 @@ There is little information out there on Cete as it’s under active development
 ![A screenshot of Stoop’s homepage](/media/capture-d’écran-2019-10-15-à-19.36.36.png)
 
 * Availability: under active development, early access available
-* Features: not available
 * Business model: not available
+* Features: not available
 
-_Update: [@coderbyheart](https://twitter.com/coderbyheart) compiled a list of only Open Source alternatives (thanks for reaching out!), [available on GitHub](https://github.com/coderbyheart/open-source-meetup-alternatives)._
+## [Introwise](https://introwise.com/)
+
+![Screenshot of Introwise’s homepage](/media/capture-d’écran-2019-10-15-à-20.53.08.png)
+
+* Availability: available
+* Business model: free for <100 attendees, monthly fee for more (see the [pricing page](https://introwise.com/pricing))
+* Features:
+  * ✅RSVP
+  * ✅Event pages
+  * ✅Mailing lists
+
+[@coderbyheart](https://twitter.com/coderbyheart) also compiled a list of only Open Source alternatives (thanks for reaching out!), [available on GitHub](https://github.com/coderbyheart/open-source-meetup-alternatives).
 
 I’ll update this page as I learn more about these alternatives. If you have other alternatives in mind, or have tried them and decided on one, please let me know [on my Twitter](https://twitter.com/phacks)!
