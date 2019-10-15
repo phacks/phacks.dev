@@ -27,7 +27,7 @@ https://twitter.com/hankchizljaw/status/1184019082313641985
 
 For those reasons, I’m considering alternatives to Meetup.com for our meetup (_should it still be called like that?_). I’ll be compiling, and updating, a list of said alternatives in this article, in the hope that it may help other organizers pick up a new, better platform, to keep doing what we love.
 
-As Meetup.com reached a position of near-monopoly on meetups, its critical size and network effect is its main strength—and no alternative today can boast about such an active user base, at least here in France. In the following list, I’ll only focus on their features and business model.
+As Meetup.com has reached a position of near-monopoly on meetups, its critical size and network effect is its main strength—and no alternative today can boast about such an active user base, at least here in France. In the following list, I’ll only focus on their features and business model. The main features I am ([and others are](https://twitter.com/pati_gallardo/status/1183842899450105856)) looking for are RSVPs (to have an estimate of the number of attendees), event pages (to share on social media) and mailing lists (to send important updates).
 
 ## [Cete](https://cete.io/)
 
