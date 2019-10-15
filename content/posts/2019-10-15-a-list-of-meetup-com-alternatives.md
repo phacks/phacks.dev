@@ -2,7 +2,7 @@
 template: post
 title: A list of Meetup.com alternatives
 slug: meetup-com-alternatives
-draft: true
+draft: false
 date: 2019-10-15T10:48:02.272Z
 description: >-
   Meetup.com announced it’s changing its business model, which will take a toll
@@ -17,7 +17,7 @@ tags:
 The new payment system will work as follows:
 
 * Organizers will pay $2/month, a little less than what they pay today to be able to organize events;
-* Attendees will pay $2/event, which is a **huge** change as meetups have mostly be free for attendees for many years.
+* Attendees will pay $2/event, which is a **huge** change as meetups have mostly been free for attendees for many years.
 
 As the co-organizer of the [JAMStack Paris](https://jamstack.paris), I am deeply concerned about this new model. I fear that people in the parisian JAMstack community, that I love to meet and have meaningful discussions with, may not want to pay to attend a previously free event. The _quality_ of the meetup (be it food, drinks, location) will not increase as a result of the new payment system, as us organizers will pocket exactly zero dollars from the Meetup fees.
 
@@ -29,7 +29,7 @@ For those reasons, I’m considering alternatives to Meetup.com for our meetup (
 
 As Meetup.com reached a position of near-monopoly on meetups, its critical size and network effect is its main strength—and no alternative today can boast about such an active user base, at least here in France. In the following list, I’ll only focus on their features and business model.
 
-# [Cete](https://cete.io/)
+## [Cete](https://cete.io/)
 
 ![A screenshot of the cete.io homepage](/media/capture-d’écran-2019-10-15-à-13.38.57.png)
 
@@ -39,23 +39,23 @@ There is little information out there on Cete as it’s under active development
 * Features: not available
 * Business model: not available
 
-# [Emamo](https://emamo.com/)
+## [Emamo](https://emamo.com/)
 
 ![A screenshot of the emamo.com organizer’s page](/media/capture-d’écran-2019-10-15-à-13.40.18.png)
 
 * Availability: available now
 * Business model:
-  * Up to 1000 Attendees: $50/month or $500/year
-  * Up to 2000 Attendees: $100/month or $1000/year
-  * Up to 3000 Attendees: $150/month or $1500/year
-  * Up to 4000 Attendees: $200/month or $2000/year
+  * Up to 1000 Attendees: \$50/month or \$500/year
+  * Up to 2000 Attendees: \$100/month or \$1000/year
+  * Up to 3000 Attendees: \$150/month or \$1500/year
+  * Up to 4000 Attendees: \$200/month or \$2000/year
   * More than 4,000 attendees? Contact us for details.
 * Features:
   * ✅RSVP
   * ✅Event pages
   * ✅Mailing lists
 
-# [Kommunity](https://kommunity.com/)
+## [Kommunity](https://kommunity.com/)
 
 ![A screenshot of Kommunity’s “explore” page](/media/capture-d’écran-2019-10-15-à-13.41.27.png)
 
@@ -66,7 +66,7 @@ There is little information out there on Cete as it’s under active development
   * ✅Event pages
   * ✅Mailing lists
 
-# [Eventy](https://eventy.io/)
+## [Eventy](https://eventy.io/)
 
 ![A screenshot of eventy.io homepage](/media/capture-d’écran-2019-10-15-à-13.42.41.png)
 
@@ -82,7 +82,7 @@ There is little information out there on Cete as it’s under active development
 * Business model: Open Source
 * Features: not available
 
-# [Mobilizon](https://joinmobilizon.org/en/)
+## [Mobilizon](https://joinmobilizon.org/en/)
 
 ![Screenshot of Mobilizon’s explore page](/media/capture-d’écran-2019-10-15-à-13.44.51.png)
 
