@@ -53,10 +53,10 @@ There is little information out there on Cete as it’s under active development
 
 * Availability: available now
 * Business model:
-  * Up to 1000 Attendees: \$50/month or \$500/year
-  * Up to 2000 Attendees: \$100/month or \$1000/year
-  * Up to 3000 Attendees: \$150/month or \$1500/year
-  * Up to 4000 Attendees: \$200/month or \$2000/year
+  * Up to 1000 Attendees: $50/month or $500/year
+  * Up to 2000 Attendees: $100/month or $1000/year
+  * Up to 3000 Attendees: $150/month or $1500/year
+  * Up to 4000 Attendees: $200/month or $2000/year
   * More than 4,000 attendees? Contact us for details.
 * Features:
   * ✅RSVP
@@ -100,6 +100,28 @@ There is little information out there on Cete as it’s under active development
   * ✅RSVP
   * ✅Event pages
   * ❌Mailing lists (not in the Beta, I couldn’t find the upcoming features)
+
+## [Meetabit](https://meetabit.com)
+
+![Screenshot of Meetabit’s homepage](/media/capture-d’écran-2019-10-15-à-19.04.06.png)
+
+* Availability: available now for selected cities only
+* Business model: free, ad-sponsored (à la Stack Overflow)
+* Features:
+  * ✅RSVP
+  * ✅Event pages
+  * ❌Mailing lists
+
+## [Eventbrite](https://www.eventbrite.com/)
+
+![Screenshot of Eventbrite’s explore page](/media/capture-d’écran-2019-10-15-à-19.15.12.png)
+
+* Availability: available now
+* Business model: free for free events
+* Features:
+  * ✅RSVP
+  * ✅Event pages
+  * ✅Mailing lists
 
 _Update: [@coderbyheart](https://twitter.com/coderbyheart) compiled a list of only Open Source alternatives (thanks for reaching out!), [available on GitHub](https://github.com/coderbyheart/open-source-meetup-alternatives)._
 
