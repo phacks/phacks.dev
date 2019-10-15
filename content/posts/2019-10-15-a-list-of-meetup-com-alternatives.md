@@ -74,7 +74,7 @@ There is little information out there on Cete as it’s under active development
 * Business model: not available
 * Features: not available
 
-# [FreeCodeCamp’s yet-unnamed Open Source alternative](https://twitter.com/ossia/status/1183845054449930241)
+## [FreeCodeCamp’s yet-unnamed Open Source alternative](https://twitter.com/ossia/status/1183845054449930241)
 
 [FreeCodeCamp](<>) is currently building an Open Source alternative to Meetup.com. They are looking for contributors, head to [this Discord channel](https://discordapp.com/invite/vbRUYWS) to get involved!
 
