@@ -14,6 +14,14 @@ tags:
 ---
 [Meetup.com](https://meetup.com) [just announced](https://www.meetup.com/lp/paymentchanges) that they are changing their business model, and will be imposing a $2 fee on attendees for each event. This is presumably a combined consequence of [WeWork acquiring Meetup](https://www.wework.com/newsroom/posts/wework-x-meetup) in 2017 and the [failed WeWork IPO](https://markets.businessinsider.com/news/stocks/wework-ipo-adam-neumann-business-model-valuation-2019-9-1028530754) earlier this year.
 
+_Important update: Meetup updated the [payment changes](https://www.meetup.com/lp/paymentchanges) page with the following information:_
+
+“_Meetup is always looking for ways to improve the experience for everyone in our community. For the past several years, organizers have paid a subscription fee to create and manage groups on Meetup. One of the options we are currently exploring is whether to reduce the subscription costs for organizers and introduce a small event fee for members. This change will help more evenly distribute costs between organizers and members._
+
+_The pricing change is currently only a limited test for select groups in a small number of locations. We will not be making any significant pricing changes in the near term. We are committed to providing advance notice before any changes go into effect._”
+
+_Original article continues below._
+
 The new payment system will work as follows:
 
 * Organizers will pay $2/month, a little less than what they pay today to be able to organize events;
