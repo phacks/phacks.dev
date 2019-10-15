@@ -109,7 +109,7 @@ There is little information out there on Cete as it’s under active development
 
 ![Screenshot of Meetabit’s homepage](/media/capture-d’écran-2019-10-15-à-19.04.06.png)
 
-* Availability: available now for selected cities only (you can tweet out to \[@meetabit](https://twitter.com/meetabit) for them to add yours)
+* Availability: available now for selected cities only (you can tweet out to [@meetabit](https://twitter.com/meetabit) for them to add yours)
 * Business model: free, ad-sponsored (à la Stack Overflow)
 * Features:
   * ✅RSVP
