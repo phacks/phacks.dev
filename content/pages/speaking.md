@@ -19,11 +19,12 @@ If you feel like this applies to you, I would gladly help you on securing your n
 
 ### Upcoming talks
 
-**[GOTO Berlin](https://gotober.com/2019)** — Fast by Default: near instant load times at scale with GatsbyJS
-
 **[GDG DevFest Wrocław](https://devfest.wroclaw.pl/)** — Getting your Team Passionate About Web Performance to Achieve Performant Web Apps
 
 ### Previous talks
+
+**[GOTO Berlin](https://gotober.com/2019)** — Fast by Default: near instant load times at scale with GatsbyJS<br />
+[See the slides](https://noti.st/phacks/oWwc9v/fast-by-default-near-instant-load-times-at-scale-with-gatsbyjs)
 
 **[FrontConf Munich](https://frontconf.com)** — Fast by default: extending GatsbyJS with plugins<br />
 [See the slides](https://noti.st/phacks/bwG0IQ/fast-by-default-extending-gatsbyjs-with-plugins)
