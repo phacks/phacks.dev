@@ -1,0 +1,173 @@
+---
+template: post
+title: A list of Meetup.com alternatives
+slug: meetup-com-alternatives
+draft: false
+date: 2019-10-15T10:48:02.272Z
+description: >-
+  Meetup.com announced it’s changing its business model, which will take a toll
+  on Meetup organizers and attendees. Here’s a list of alternatives to consider
+  for meetup organizers.
+category: Meetup
+tags:
+  - Meetup
+---
+[Meetup.com](https://meetup.com) [just announced](https://www.meetup.com/lp/paymentchanges) that they are changing their business model, and will be imposing a $2 fee on attendees for each event. This is presumably a combined consequence of [WeWork acquiring Meetup](https://www.wework.com/newsroom/posts/wework-x-meetup) in 2017 and the [failed WeWork IPO](https://markets.businessinsider.com/news/stocks/wework-ipo-adam-neumann-business-model-valuation-2019-9-1028530754) earlier this year.
+
+_**Important update: Meetup updated the [payment changes](https://www.meetup.com/lp/paymentchanges) page with the following information:**_
+
+“_Meetup is always looking for ways to improve the experience for everyone in our community. For the past several years, organizers have paid a subscription fee to create and manage groups on Meetup. One of the options we are currently exploring is whether to reduce the subscription costs for organizers and introduce a small event fee for members. This change will help more evenly distribute costs between organizers and members._
+
+_The pricing change is currently only a limited test for select groups in a small number of locations. We will not be making any significant pricing changes in the near term. We are committed to providing advance notice before any changes go into effect._”
+
+_**Another, more recent, update**:_
+
+_This payment change is currently only a limited test for a small number of groups. Organizers of these select groups have the option to opt-out of this test. We will not be making any significant payment changes in the near term. We are committed to providing advance notice before any changes go into effect._
+
+_Original article continues below. I changed the following sentence from “will work” to “would work” to reflect Meetup.com’s updates._
+
+The new payment system would work as follows:
+
+* Organizers will pay $2/month, a little less than what they pay today to be able to organize events;
+* Attendees will pay $2/event, which is a **huge** change as meetups have mostly been free for attendees for many years.
+
+As the co-organizer of the [JAMStack Paris](https://jamstack.paris), I am deeply concerned about this new model. I fear that people in the parisian JAMstack community, that I love to meet and have meaningful discussions with, may not want to pay to attend a previously free event. The _quality_ of the meetup (be it food, drinks, location) will not increase as a result of the new payment system, as us organizers will pocket exactly zero dollars from the Meetup fees.
+
+In addition, Meetup-goers usually attend several events in a single month, meaning that the $2 fee may add up to a considerable expense.
+
+https://twitter.com/hankchizljaw/status/1184019082313641985
+
+For those reasons, I’m considering alternatives to Meetup.com for our meetup (_should it still be called like that?_). I’ll be compiling, and updating, a list of said alternatives in this article, in the hope that it may help other organizers pick up a new, better platform, to keep doing what we love.
+
+As Meetup.com has reached a position of near-monopoly on meetups, its critical size and network effect is its main strength—and no alternative today can boast about such an active user base, at least here in France. In the following list, I’ll only focus on their features and business model. The main features I am ([and others are](https://twitter.com/pati_gallardo/status/1183842899450105856)) looking for are RSVPs (to have an estimate of the number of attendees), event pages (to share on social media) and mailing lists (to send important updates).
+
+## [Cete](https://cete.io/)
+
+![A screenshot of the cete.io homepage](/media/a-list-of-meetup-com-alternatives/cete.png)
+
+There is little information out there on Cete as it’s under active development. I’ve signed up for early access, I’ll let you know more about it as soon as I can!
+
+* Availability: under active development, early access available
+* Features: not available
+* Business model: not available
+
+## [Emamo](https://emamo.com/)
+
+![A screenshot of the emamo.com organizer’s page](/media/a-list-of-meetup-com-alternatives/emamo.png)
+
+* Availability: available now
+* Business model:
+  * Up to 1000 Attendees: $50/month or $500/year
+  * Up to 2000 Attendees: $100/month or $1000/year
+  * Up to 3000 Attendees: $150/month or $1500/year
+  * Up to 4000 Attendees: $200/month or $2000/year
+  * More than 4,000 attendees: you would have to contact them
+* Features:
+  * ✅RSVP
+  * ✅Event pages
+  * ✅Mailing lists
+
+## [Kommunity](https://kommunity.com/)
+
+![A screenshot of Kommunity’s “explore” page](/media/a-list-of-meetup-com-alternatives/kommunity.png)
+
+* Availability: available now (it even looks like a big deal over in Turkey)
+* Business model: it _looks_ like it’s free, however I couldn’t find any Princing page or the underlying business model. To be taken with a grain of salt. Update: see [this tweet](https://twitter.com/EmirKarsiyakali/status/1184077599871516673) from the founder for more info.
+* Features:
+  * ✅RSVP
+  * ✅Event pages
+  * ✅Mailing lists
+
+## [Eventy](https://eventy.io/)
+
+![A screenshot of eventy.io homepage](/media/a-list-of-meetup-com-alternatives/eventy.png)
+
+* Availability: under active development, no early access
+* Business model: not available
+* Features: not available
+
+## [FreeCodeCamp’s Chapter](https://github.com/freeCodeCamp/chapter)
+
+[FreeCodeCamp](https://www.freecodecamp.org/) is currently building an Open Source alternative to Meetup.com, Chapter. Head to [the repo](https://github.com/freeCodeCamp/chapter) for more information and/or to contribute!
+
+* Availability: under active development
+* Business model: Open Source
+* Features: not available
+
+## [Mobilizon](https://joinmobilizon.org/en/)
+
+![Screenshot of Mobilizon’s explore page](/media/a-list-of-meetup-com-alternatives/mobilizon.png)
+
+* Availability: available in Beta, the 1.0 is scheduled for the first half of 2020
+* Business model: Crowdfunded, Open Source
+* Features:
+  * ✅RSVP
+  * ✅Event pages
+  * ❌Mailing lists (not in the Beta, I couldn’t find the upcoming features)
+
+## [Meetabit](https://meetabit.com)
+
+![Screenshot of Meetabit’s homepage](/media/a-list-of-meetup-com-alternatives/meetabit.png)
+
+* Availability: available now for selected cities only (you can tweet out to [@meetabit](https://twitter.com/meetabit) for them to add yours)
+* Business model: free, ad-sponsored (à la Stack Overflow)
+* Features:
+  * ✅RSVP
+  * ✅Event pages
+  * ✅Mailing lists
+
+## [Eventbrite](https://www.eventbrite.com/)
+
+![Screenshot of Eventbrite’s explore page](/media/a-list-of-meetup-com-alternatives/eventbrite.png)
+
+* Availability: available now
+* Business model: free for free events
+* Features:
+  * ✅RSVP
+  * ✅Event pages
+  * ✅Mailing lists
+
+## [Colloq](https://colloq.io/)
+
+![Screenshot of Colloq’s explore page](/media/a-list-of-meetup-com-alternatives/colloq.png)
+
+* Availability: available now
+* Business model: freemium, see the [princing page](https://colloq.io/pricing)
+* Features:
+  * ✅RSVP
+  * ✅Event pages
+  * ✅Mailing lists
+
+## [Stoop](https://www.producthunt.com/upcoming/stoop-1)
+
+![A screenshot of Stoop’s homepage](/media/a-list-of-meetup-com-alternatives/stoop.png)
+
+* Availability: under active development, early access available
+* Business model: not available
+* Features: not available
+
+## [Introwise](https://introwise.com/)
+
+![Screenshot of Introwise’s homepage](/media/a-list-of-meetup-com-alternatives/introwise.png)
+
+* Availability: available
+* Business model: free for <100 attendees, monthly fee for more (see the [pricing page](https://introwise.com/pricing))
+* Features:
+  * ✅RSVP
+  * ✅Event pages
+  * ✅Mailing lists
+
+## Mixily
+
+![Screenshot of Mixily’s homepage](/media/a-list-of-meetup-com-alternatives/mixily.png)
+
+* Availability: available
+* Business model: free for free events, paid ticketing is in private beta, with pricing comparable to eventbrite. Contact [andrew@mixily.com](mailto:andrew@mixily.com) to join the ticketing beta.
+* Features:
+  * ✅RSVP
+  * ✅Event pages
+  * ✅Mailing lists
+
+[@coderbyheart](https://twitter.com/coderbyheart) also compiled a list of only Open Source alternatives (thanks for reaching out!), [available on GitHub](https://github.com/coderbyheart/open-source-meetup-alternatives).
+
+I’ll update this page as I learn more about these alternatives. If you have other alternatives in mind, or have tried them and decided on one, please let me know [on my Twitter](https://twitter.com/phacks)!
