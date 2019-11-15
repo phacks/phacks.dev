@@ -4,7 +4,6 @@ title: Speaking
 slug: speaking
 draft: false
 ---
-
 I’m an international speaker, currently looking for speaking gigs for late-2019/2020.
 
 I mostly speak on Web Performance, React, Redux and the JAMstack.
@@ -17,11 +16,10 @@ However, securing a talk at a meetup or a conference can be way harder for peopl
 
 If you feel like this applies to you, I would gladly help you on securing your next talk (help writing your proposal, rehearsing…). Just contact me (links are in the menu) and we’ll figure out how to best make it happen!
 
-### Upcoming talks
-
-**[GDG DevFest Wrocław](https://devfest.wroclaw.pl/)** — Getting your Team Passionate About Web Performance to Achieve Performant Web Apps
-
 ### Previous talks
+
+**[GDG DevFest Wrocław](https://devfest.wroclaw.pl/)** — Getting your Team Passionate About Web Performance to Achieve Performant Web Apps<br />
+[See the slides](https://noti.st/phacks/0Knr7j/getting-your-team-passionate-about-web-performance-to-achieve-performant-web-apps)
 
 **[GOTO Berlin](https://gotober.com/2019)** — Fast by Default: near instant load times at scale with GatsbyJS<br />
 [See the slides](https://noti.st/phacks/oWwc9v/fast-by-default-near-instant-load-times-at-scale-with-gatsbyjs)
