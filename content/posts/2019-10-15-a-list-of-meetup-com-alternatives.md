@@ -2,7 +2,7 @@
 template: post
 title: A list of Meetup.com alternatives
 slug: meetup-com-alternatives
-draft: false
+draft: true
 date: 2019-10-15T10:48:02.272Z
 description: >-
   Meetup.com announced it’s changing its business model, which will take a toll
