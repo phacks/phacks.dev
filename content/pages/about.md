@@ -1,10 +1,11 @@
 ---
-title: "About me"
-template: "page"
-socialImage: "/media/image-2.jpg"
+template: page
+title: About me
+slug: about
+draft: false
 ---
 
-I’m a French Fullstack developer & Web Performance Evangelist at [Theodo](https://www.theodo.fr) based in Paris.
+I’m a French Fullstack developer at [Orbit](https://orbit.love) (previously at [Theodo](https://www.theodo.fr)) based in Paris.
 
 I am the co-organizer of the [WeLoveSpeed conference](https://welovespeed.com), the [JAMstack.paris Meetup](https://jamstack.paris) and a regular [GatsbyJS](https://gatsbyjs.org) contributor.
 
