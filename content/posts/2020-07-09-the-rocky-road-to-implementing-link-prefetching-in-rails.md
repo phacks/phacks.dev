@@ -2,7 +2,7 @@
 template: post
 title: The rocky road to implementing link prefetching in Rails
 slug: the-rocky-road-to-implementing-link-prefetching-in-rails
-draft: true
+draft: false
 date: 2020-07-09T12:44:49.281Z
 description: >-
   I set up to implement link prefetching in our Ruby on Rails application, and
@@ -11,8 +11,6 @@ category: Web Performance
 tags:
   - Web Performance
 ---
-_Cover image credits: Photo by [Melanie Dretvic](https://unsplash.com/@designwilde?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/rocky-road?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)_
-
 Web performance matters for many reasons: a [better](https://developers.google.com/web/fundamentals/performance/why-performance-matters), [more inclusive](http://marcysutton.github.io/a11y-perf/#/) user experience; less [waste](https://timkadlec.com/remembers/2019-01-09-the-ethics-of-performance/) of resources (your user’s devices will thank you); and an increase in business metrics like [conversion](https://blog.dareboost.com/en/2018/08/continuous-improvement-web-performance-dareboost-m6web/), [SEO traffic](https://medium.com/@Pinterest_Engineering/driving-user-growth-with-performance-improvements-cfc50dafadd7#.wwimdmkpp), and even [revenue](https://jobs.zalando.com/tech/blog/loading-time-matters/index.html).
 
 It also happens that it is one of my favorite technical topics, and I fell down the rabbit hole of optimizations (and got to talk about it) [more](https://youtu.be/p14g-Sep7HY) [than](https://www.youtube.com/watch?v=m3XL0LVJaUo) [one](https://www.youtube.com/watch?v=wMaJ8sCuZcg) time.
@@ -37,15 +35,15 @@ So, InstantPage says that a _single line of code_ can make this work. Well… in
 
 It turns out that InstantPage and Turbolinks (Rails integrated library to make navigation faster and Single Page App-like) do not pair well together: 
 
-{% github https://github.com/instantpage/instant.page/issues/52#issuecomment-541359775 %}
+> I’ve talked privately with @dhh and he said he’s interested in bringing the just-in-time preloading mechanism into Turbolinks. I also plan to make an alternative to Turbolinks that uses them (in fact I already did so with InstantClick, but it lacks good documentation and a bunch of other things, I plan to reboot it). So maybe I won’t make instant.page compatible with Turbolinks in the next version, it will depend on ease of implementation, we shall see.
+
+(source: https://github.com/instantpage/instant.page/issues/52#issuecomment-541359775)
 
 Damn. Well, maybe Turbolinks already solved that problem and I don’t even need InstantPage?
 
 # A prefetching solution based on Turbolinks
 
-A quick search in the Turbolinks repository issues showed that I was not the first one to want link prefetching:
-
-{% github https://github.com/turbolinks/turbolinks/issues/313 %}
+A quick search in the Turbolinks repository issues showed that I was not the first one to want link prefetching: https://github.com/turbolinks/turbolinks/issues/313
 
 Reading through that 50+ comments discussion (!), I found that GitHub user 
 [hopsoft](https://github.com/hopsoft) helpfully shared a [gist](https://gist.github.com/hopsoft/ab500a3b584e2878c83137cb539abb32) implementing a link prefetching strategy leaning on Turbolinks cache.
