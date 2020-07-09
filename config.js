@@ -28,7 +28,7 @@ module.exports = {
     name: "Nicolas Goutay",
     photo: "/photo.jpg",
     bio:
-      "Web Performance Evangelist @Theodo. International speaker, co-organizer of conferences & meetups. Pardon my French.",
+      "Software Enginner @Orbit. International speaker, co-organizer of conferences & meetups. Pardon my French.",
     contacts: {
       email: "nicolas.goutay@gmail.com",
       facebook: "",
