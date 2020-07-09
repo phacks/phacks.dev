@@ -21,7 +21,7 @@ https://twitter.com/Dieulot/status/1261665346030895105
 
 [Instant Page](https://instant.page/) has a very enticing promise: what if, by dropping a _single line of code_ into your app, you could make it _feel instant_?
 
-InstantPage achieves this by using a technique called _[link prefetching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Link_prefetching_FAQ)_. Traditionally, a website loads the HTML contents of a new page when the user has clicked on its link. InstantPage takes full advantage of the fact that to click a link, the user has to get there, and usually spends a few hundred milliseconds _hovering_ on it. By triggering the page load on _hover_, instead of on _click_, we can shave off those few hundred milliseconds of load time, making the transition to the new page _feel instant_.
+InstantPage achieves this by using a technique called [link prefetching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Link_prefetching_FAQ). Traditionally, a website loads the HTML contents of a new page when the user has clicked on its link. InstantPage takes full advantage of the fact that to click a link, the user has to get there, and usually spends a few hundred milliseconds _hovering_ on it. By triggering the page load on _hover_, instead of on _click_, we can shave off those few hundred milliseconds of load time, making the transition to the new page _feel instant_.
 
 You can see this pattern in action on this very website, [dev.to](https://dev.to)! Feels fast, doesn't it?
 
@@ -37,7 +37,7 @@ It turns out that InstantPage and Turbolinks (Rails integrated library to make n
 
 > I’ve talked privately with @dhh and he said he’s interested in bringing the just-in-time preloading mechanism into Turbolinks. I also plan to make an alternative to Turbolinks that uses them (in fact I already did so with InstantClick, but it lacks good documentation and a bunch of other things, I plan to reboot it). So maybe I won’t make instant.page compatible with Turbolinks in the next version, it will depend on ease of implementation, we shall see.
 
-(source: https://github.com/instantpage/instant.page/issues/52#issuecomment-541359775)
+([source](https://github.com/instantpage/instant.page/issues/52#issuecomment-541359775))
 
 Damn. Well, maybe Turbolinks already solved that problem and I don’t even need InstantPage?
 
