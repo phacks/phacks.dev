@@ -77,8 +77,13 @@ export default function About() {
               </p>
               <p>
                 I’m interested in performance, accessibility, maintainability,
-                product design, and the interplay between those. Said otherwise,
+                product design, and the interplay between those. In other words,
                 I try to build enjoyable products—for all the parties involved.
+              </p>
+              <p>
+                The picture on this page was taken serendipitously in
+                Paris by a street photographer. I like it. Credits:
+                <a href="https://www.instagram.com/ajapictures/?hl=en" class="text-teal-500 hover:underline">@ajapictures</a>.
               </p>
             </div>
           </div>
