@@ -1,0 +1,84 @@
+import { ArticleLayout } from '@/components/ArticleLayout'
+import Image from 'next/image'
+import slackAppImage from './slack-app.png'
+
+export const meta = {
+  author: 'Nicolas Goutay',
+  date: '2021-01-06',
+  title: 'Declaring multiple sets of scopes for the same provider with Devise and OmniAuth in Rails',
+  description:
+    'If you’re familiar with the Rails ecosystem, the names Devise and OmniAuth might ring a bell: the former is a gem that handles (nearly) everything related to authentication; coupled with the latter, it makes implementing popular Social Login providers (e.g. Login with Facebook, or Twitter, or GitHub…) a breeze.',
+}
+
+export default (props) => <ArticleLayout meta={meta} {...props} />
+
+If you’re familiar with the Rails ecosystem, the names [Devise](https://github.com/heartcombo/devise) and [OmniAuth](https://github.com/omniauth/omniauth) might ring a bell: the former is a gem that handles (nearly) everything related to authentication; coupled with the latter, it makes implementing popular Social Login providers (e.g. Login with Facebook, or Twitter, or GitHub…) a breeze.
+
+They can also be used to abstract away the whole OAuth dance that developers need to wrangle with every time they want to connect to a third-party API. We use it extensively at Orbit to authenticate with the GitHub, Twitter, Discourse, and Slack APIs, allowing us to build [powerful integrations](https://orbit.love/integrations) on top of those.
+
+Take Slack, for example. Our [Slack App](https://docs.orbit.love/docs/install-the-orbit-slack-app-beta) connects Orbit to our users’ Slack workspaces to send notifications and provide a handy `/orbit` command.
+
+<Image src={slackAppImage} alt="The command /orbit add github:phacks added a new member to our Orbit community" />
+
+Here’s what the OmniAuth provider for that looks like:
+
+```ruby
+config.omniauth :slack,
+                ENV['SLACK_CLIENT_ID'],
+                ENV['SLACK_CLIENT_SECRET'],
+                scope: 'commands,chat:write,chat:write.public,channels:read'
+```
+
+In some cases, however, you might need two different sets of scopes for two distinct integrations with the same service.
+
+As we’re building our Slack Integration, which will allow users to gather and analyze the activity in their community Slack, we realized that we needed users to authorize to Slack twice: once on their team Slack, for the Slack App, and once on their community Slack, for the Slack integration. Moreover, the required scopes would differ wildly: as the Slack App needs to post messages and respond to slash commands, the Slack integration would only need to listen to events (e.g. somebody joined, or posted a message).
+
+Adding both sets of scopes to our single OmniAuth provider would have worked, but it is considered (rightly) a security risk to ask for too broad a scope: in our case, the Slack App has no business listening to new messages and the Slack Integration shouldn’t be able to post messages in a channel.
+
+So we needed to create two sets of scopes (one for the App, one for the Integration) for the same provider (Slack).
+
+The first step was to rename our existing provider (the one above) to `:slack_app`. By doing this however, we lose the implicit binding of that provider to the Slack strategy—which we can hopefully add back with the `strategy_class` option:
+
+```ruby
+config.omniauth :slack_app,
+                ENV['SLACK_APP_CLIENT_ID'],
+                ENV['SLACK_APP_CLIENT_SECRET'],
+                scope: 'commands,chat:write,chat:write.public,channels:read',
+                strategy_class: OmniAuth::Strategies::Slack
+```
+
+This gets us close, but not yet there: this config will set the provider attribute of the OAuth return payload to `slack`, not `slack_app`—meaning the callback route cannot know whether this particular user authorized the Slack App or the Slack Integration.
+
+We can get around this by adding the `name: slack_app` option, which will do two things:
+
+- Set the provider attribute of the OAuth return payload to the right value, and
+- Change the OAuth callback route to `/users/auth/slack_app/callback` instead of `/users/auth/slack/callback`. (If you’re curious, [here’s](https://github.com/omniauth/omniauth/blob/8a6b7a6f9e1b95dd98eb6ac22eeb8e7fb0df77a6/lib/omniauth/strategy.rb#L118-L139) the bit of code in OmniAuth that’s responsible for inferring the callback URL.)
+
+After changing the `app/controllers/users/omniauth_callbacks_controller.rb` to reflect the change in the URL (`slack` becomes `slack_app`), everything is running smoothly again.
+
+We can now add our second provider for the Slack Integration, with its distinct name and scope.
+
+```ruby
+config.omniauth :slack_app,
+                ENV['SLACK_APP_CLIENT_ID'],
+                ENV['SLACK_APP_CLIENT_SECRET'],
+                name: 'slack_app',
+                scope: 'commands,chat:write,chat:write.public,channels:read',
+                strategy_class: OmniAuth::Strategies::Slack
+
+config.omniauth :slack_integration,
+                ENV['SLACK_INTEGRATION_CLIENT_ID'],
+                ENV['SLACK_INTEGRATION_CLIENT_SECRET'],
+                name: 'slack_integration',
+                scope:
+                  'channels:history,channels:read,reactions:read,users:read.email,users.profile:read',
+                strategy_class: OmniAuth::Strategies::Slack
+```
+
+Tada! Our users can now authorize only minimal scopes for the App, the Integration, our both—a win for security!
+
+OAuth can often feel confusing, and I want to take this opportunity to thank the Devise and OmniAuth maintainers and contributors who are doing a remarkable job to make it easier for the rest of us.
+
+Hope this article can help folks facing the same issues we did!
+
+_Originally published on the [Orbit Blog](https://orbit.love/blog/how-to-add-twitter-and-instagram-embeds-on-an-eleventy-website-using-sanity)._

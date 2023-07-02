@@ -1,0 +1,79 @@
+import { ArticleLayout } from '@/components/ArticleLayout'
+import Image from 'next/image'
+import messageImage from './message.png'
+import stationImage from './station.png'
+
+export const meta = {
+  author: 'Nicolas Goutay',
+  date: '2022-04-07',
+  title: 'Introducing notion-ruby-client: an Open-Source Ruby Client for the Notion API',
+  description:
+    'In which I build an open-source Ruby client for the Notion API.',
+}
+
+export default (props) => <ArticleLayout meta={meta} {...props} />
+
+## Tinkering with the Notion API
+
+We’re big fans of [Notion](http://notion.so/) at Orbit, using it for things as varied as product roadmap, onboarding documentation, Architecture Decision Records, and user interview notes. Its versatility is its biggest strength: we love its ability to adapt gracefully from a place to jot down notes to one that houses complex, interwoven knowledge databases.
+
+For a long time, though, Notion was missing a key ingredient to truly become the central tool to a lot of teams, including ours: an API. In late January 2021, I got access to their private beta and started playing around with the many possibilities that it opened.
+
+<Image src={messageImage} alt="A screenshot of a Slack message, by me, dated Jan 28th, 2021 saying “”Got my hands on the Notion API docs 👀" />
+
+I got excited about building all kinds of fun projects with the API docs, but I quickly realized that I kept copy-pasting code from one to the other: calling endpoints, error handling, pagination. Suddenly, I had an [itch to scratch](https://2021.ploneconf.org/schedule/scratching-my-own-itch-a-hands-on-look-at-contributing-to-an-open-source-project), and I started working on an open-source Ruby client for the Notion API, [`notion-ruby-client`](https://github.com/orbit-love/notion-ruby-client).
+
+## Releasing version 1.0
+
+A year later, the API is [out of beta](https://www.notion.so/blog/api-ga), added [tons of new features](https://developers.notion.com/changelog/retrieve-page-property-values), and it’s finally time for [`notion-ruby-client`](https://github.com/orbit-love/notion-ruby-client) to hit the anticipated 1.0 version!
+
+[`notion-ruby-client`](https://github.com/orbit-love/notion-ruby-client) abstracts away the Notion API intricacies so that you can focus on building your own integration:
+
+- All Notion API endpoints are available and documented;
+- First-party support for pagination, rate-limiting, and API errors;
+- Super simple configuration—you only need a single line of code to start using the API client
+
+Getting started is as simple as this:
+
+```ruby
+client = Notion::Client.new(token: '<your Notion API token>')
+```
+
+You’re now ready to [create a new page](https://github.com/orbit-love/notion-ruby-client#create-a-page), [update a database](https://github.com/orbit-love/notion-ruby-client#update-a-database), or [add blocks to a page](https://github.com/orbit-love/notion-ruby-client#append-block-children)!
+
+```ruby
+# Retrieving the title of a page
+#
+page = client.page(page_id: "c2a078405abf45bcb11c09fef6dfc3af")
+page.properties.Name.title.first.text.content
+# "🥬 Tuscan Kale"
+
+# Retrieving the contents of the first block of a page
+#
+blocks = client.block_children(block_id: "c2a078405abf45bcb11c09fef6dfc3af")
+blocks.results.first.paragraph.rich_text.first.text.content
+# "Lacinato kale is a variety of kale with a long tradition in Italian cuisine, especially that of Tuscany. It is also known as Tuscan kale, Italian kale, dinosaur kale, kale, flat back kale, palm tree kale, or black Tuscan palm."
+```
+
+_[⌨️ Try it on Repl.it](https://replit.com/@NicolasGoutay/Notion-Ruby-Client-Getting-Started?v=1#main.rb)_
+
+## What can it be used for?
+
+At Orbit, we’ve built a number of projects, big and small, using notion-ruby-client:
+
+- [`community-ruby-notion-orbit`](https://github.com/orbit-love/community-ruby-notion-orbit) is an Open Source Orbit integration, that synchronizes user interview notes taken in Notion to the community member’s profile in Orbit
+- **Station** is our internal tool designed for sharing knowledge and building culture, which uses Notion as a CMS
+
+<Image src={stationImage} alt="An example article on Station, written and edited in Notion, synced with notion-ruby-client" />
+
+[`notion-ruby-client`](https://github.com/orbit-love/notion-ruby-client) also powers amazing open-source projects:
+
+- [Notion Tracker Create](https://github.com/jimgraham/notion-tracker-create), using Notion to create an Atomic Habit-style tracker ([@jimgraham](https://github.com/jimgraham))
+- [Bookworm](https://github.com/zorbash/bookworm), to import Kindle highlights into a Notion database ([@zorbash](https://github.com/zorbash))
+- [jekyll-notion](https://github.com/emoriarty/jekyll-notion), to import Notion pages into a Jekyll-powered website ([@emoriarty](https://github.com/emoriarty))
+
+The Notion API enables endless possibilities, ranging from personal workflows to powerful integrations with other services—I hope that [`notion-ruby-client`](https://github.com/orbit-love/notion-ruby-client) makes it easier to get started building your very own!
+
+_Special thanks to contributors [@bengreenberg](https://github.com/bencgreenberg), [@H0R15H0](https://github.com/H0R15H0), and [@hkob](https://github.com/hkob) for fixing issues and adding new capabilities to the project—your contributions are highly appreciated!_
+
+_Originally published on the [Orbit Blog](https://orbit.love/blog/introducing-notion-ruby-client-open-source-ruby-client-notion-api)._

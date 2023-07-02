@@ -1,0 +1,876 @@
+import { ArticleLayout } from '@/components/ArticleLayout'
+import Image from 'next/image'
+import reduxDevToolsImage from './redux-dev-tools.png'
+import uiWorkflowImage from './ui_workflow.png'
+
+export const meta = {
+  author: 'Nicolas Goutay',
+  date: '2016-03-30',
+  title: 'Getting Started with React, Redux and Immutable: a Test-Driven TodoMVC Tutorial (Part 2)',
+  description:
+    'This is the second and last part of the React, Redux and Immutable tutorial.',
+}
+
+export default (props) => <ArticleLayout meta={meta} {...props} />
+
+This is the second and last part of the React, Redux and Immutable tutorial. In case you missed it, the first part is available [here](http://www.theodo.fr/blog/2016/03/getting-started-with-react-redux-and-immutable-a-test-driven-tutorial-part-1/).
+
+In the first part, we laid the UI foundation for our app, developing and unit-testing modular components.
+
+We saw that the state of our app was passed down to individual components as React `props`, and that user-actions were declared as callbacks, thus separating UI from app logic.
+
+In case you're onboarding now or you would like to start this second part from exactly where we left earlier, here is a [link](https://github.com/phacks/redux-todomvc/commit/aa101fc0f45369ae05f3984715b8213a47d49ddc) to the commit from the [companion repository](https://github.com/phacks/redux-todomvc) I'll be starting from.
+
+Feel free to clone the repo and follow along!
+
+## Introducing the Redux workflow
+
+At this point, our UI is not interactive: although we tested the fact that if an item is set as `completed` it will be stricken through, there is as yet no way to invite the user to complete it.
+
+In the Redux ecosystem, UI updates and user options always follow the same workflow:
+
+1. The state tree defines the UI and the action callbacks through `props`
+2. User actions, such as clicks, are sent to an _action creator_ that normalizes them
+3. The resulting redux actions are passed to a _reducer_ that implements the actual app logic
+4. The reducer updates the state tree and dispatches it to a _store_ that, well, stores it
+5. The UI is updated accordingly to the new state tree in the store
+
+<Image src={uiWorkflowImage} alt="" />
+
+## Setting the initial state
+
+_Note: [here](https://github.com/phacks/redux-todomvc/commit/be48d4d610b3438aeb1dfcd07d317b3c72fbdb3e) is the relevant commit in the companion repository._
+
+Our first action will allow us to properly set the initial state in the Redux _store_, that we are about to create.
+
+An action in Redux is a payload of information. As such, it is represented by a JSON object with a `type` attribute that describes concisely _what_ the action does and other pieces of information devised by the needs of the app. In our case, the type can be set to `SET_STATE` and we can add a `state` object that contains the desired state:
+
+```javascript
+{
+  type: 'SET_STATE',
+  state: {
+    todos: [
+      {id: 1, text: 'React', status: 'active', editing: false},
+      {id: 2, text: 'Redux', status: 'active', editing: false},
+      {id: 3, text: 'Immutable', status: 'active', editing: false},
+    ],
+    filter: 'all'
+  }
+}
+```
+
+This action will be _dispatched_ to a _reducer_, whose role will be to identify it and implement the actual logic associated with the action.
+
+In our case, the logic will be to save the new state inside the _store_, so that it can be propagated through our app.
+
+Let's write the unit tests for our reducer:
+
+`test/reducer_spec.js`
+
+```javascript
+import { List, Map, fromJS } from "immutable";
+import { expect } from "chai";
+
+import reducer from "../src/reducer";
+
+describe("reducer", () => {
+  it("handles SET_STATE", () => {
+    const initialState = Map();
+    const action = {
+      type: "SET_STATE",
+      state: Map({
+        todos: List.of(
+          Map({ id: 1, text: "React", status: "active" }),
+          Map({ id: 2, text: "Redux", status: "active" }),
+          Map({ id: 3, text: "Immutable", status: "completed" })
+        )
+      })
+    };
+
+    const nextState = reducer(initialState, action);
+
+    expect(nextState).to.equal(
+      fromJS({
+        todos: [
+          { id: 1, text: "React", status: "active" },
+          { id: 2, text: "Redux", status: "active" },
+          { id: 3, text: "Immutable", status: "completed" }
+        ]
+      })
+    );
+  });
+});
+```
+
+We would also like, for convenience, to write the `state` object in plain JS instead of using Immutable data structures - and let our reducer handle the conversion. Finally, the reducer should handle an `undefined` initial state gracefully:
+
+`test/reducer_spec.js`
+
+```javascript
+// ...
+describe("reducer", () => {
+  // ...
+  it("handles SET_STATE with plain JS payload", () => {
+    const initialState = Map();
+    const action = {
+      type: "SET_STATE",
+      state: {
+        todos: [
+          { id: 1, text: "React", status: "active" },
+          { id: 2, text: "Redux", status: "active" },
+          { id: 3, text: "Immutable", status: "completed" }
+        ]
+      }
+    };
+    const nextState = reducer(initialState, action);
+    expect(nextState).to.equal(
+      fromJS({
+        todos: [
+          { id: 1, text: "React", status: "active" },
+          { id: 2, text: "Redux", status: "active" },
+          { id: 3, text: "Immutable", status: "completed" }
+        ]
+      })
+    );
+  });
+
+  it("handles SET_STATE without initial state", () => {
+    const action = {
+      type: "SET_STATE",
+      state: {
+        todos: [
+          { id: 1, text: "React", status: "active" },
+          { id: 2, text: "Redux", status: "active" },
+          { id: 3, text: "Immutable", status: "completed" }
+        ]
+      }
+    };
+    const nextState = reducer(undefined, action);
+    expect(nextState).to.equal(
+      fromJS({
+        todos: [
+          { id: 1, text: "React", status: "active" },
+          { id: 2, text: "Redux", status: "active" },
+          { id: 3, text: "Immutable", status: "completed" }
+        ]
+      })
+    );
+  });
+});
+```
+
+Our reducer will match the `type` of incoming actions, and if the type is `SET_STATE`, will merge the current state (in this case, the inital state) with the one in the payload:
+
+`src/reducer.js`
+
+```javascript
+import { Map } from "immutable";
+
+function setState(state, newState) {
+  return state.merge(newState);
+}
+
+export default function(state = Map(), action) {
+  switch (action.type) {
+    case "SET_STATE":
+      return setState(state, action.state);
+  }
+  return state;
+}
+```
+
+We now have to wire up the reducer with our app, so that when the app launches the initial state is set up using our action. This is actually our first call to the Redux library, so we have to install it as well:
+
+```bash
+npm install --save redux react-redux
+```
+
+`src/index.jsx`
+
+```javascript
+import React from "react";
+import ReactDOM from "react-dom";
+import { List, Map } from "immutable";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import reducer from "./reducer";
+import { TodoAppContainer } from "./components/TodoApp";
+
+// We instantiate a new Redux store
+const store = createStore(reducer);
+// We dispatch the SET_STATE action holding the desired state
+store.dispatch({
+  type: "SET_STATE",
+  state: {
+    todos: [
+      { id: 1, text: "React", status: "active", editing: false },
+      { id: 2, text: "Redux", status: "active", editing: false },
+      { id: 3, text: "Immutable", status: "active", editing: false }
+    ],
+    filter: "all"
+  }
+});
+
+require("../node_modules/todomvc-app-css/index.css");
+
+ReactDOM.render(
+  // We wrap our app in a Provider component to pass the store down to the components
+  <Provider store={store}>
+    <TodoAppContainer />
+  </Provider>,
+  document.getElementById("app")
+);
+```
+
+If you look closely to the previous code snippet, you may notice how the `TodoApp` component was substituded by `TodoAppContainer`. In Redux, there are two types of components: _Presentational_ and _Container_. I encourage you to read [this highly informative article](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0#.e5z2vws8e) by Dan Abramov that highlights the difference between the two.
+
+If I were to sum it up quickly, I would quote the Redux [docs](http://redux.js.org/docs/basics/UsageWithReact.html):
+
+“Presentational components are about how things _look_ (styles and templates) and Container components are about how things _work_ (data fetching, state updates).”
+
+Okay, so we have our store set up and passed down at our `TodoAppContainer` component. However, in order for our child component to make sense of the store, we have to map the state attributes to React `props` for the `TodoApp` component - that is what gives us the `TodoAppContainer`:
+
+`src/components/TodoApp.jsx`
+
+```javascript
+// ...
+import { connect } from "react-redux";
+
+export class TodoApp extends React.Component {
+  // ...
+}
+function mapStateToProps(state) {
+  return {
+    todos: state.get("todos"),
+    filter: state.get("filter")
+  };
+}
+
+export const TodoAppContainer = connect(mapStateToProps)(TodoApp);
+```
+
+If you reload your app in the browser, you should see it initialized like before - except now it's using Redux tools.
+
+## The Redux dev tools
+
+_Note: [here](https://github.com/phacks/redux-todomvc/commit/9e82a2bf7ffaea5d0fda6af361a126517aecc115) is the relevant commit in the companion repository._
+
+Now that we have a Redux store and reducer set up, we can set up the Redux dev tools for a streamlined development experience.
+
+First, go and grab the [Redux dev tools Chrome extension](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd).
+
+The dev tools are enabled at the time of the store creation, in `index.jsx`:
+
+`src/index.jsx`
+
+```javascript
+// ...
+import { compose, createStore } from "redux";
+
+const createStoreDevTools = compose(
+  window.devToolsExtension ? window.devToolsExtension() : f => f
+)(createStore);
+const store = createStoreDevTools(reducer);
+// ...
+```
+
+<Image src={reduxDevToolsImage} alt="" />
+
+Reload the app in your browser and click on the Redux icon in the dev tools: here they are!
+
+Three different monitors are available out of the box: the Diff Monitor, the Log Monitor and the Slider Monitor (the one I talked about in [part one](http://www.theodo.fr/blog/2016/03/getting-started-with-react-redux-and-immutable-a-test-driven-tutorial-part-1/)). Feel free to play around with them :)
+
+## Setting up our actions with Action Creators
+
+### Toggling the status of an item
+
+_Note: [here](https://github.com/phacks/redux-todomvc/commit/7a2dc0963684b569c11f92e41a324324dfb21bdc) is the relevant commit in the companion repository._
+
+The next step is to allow the user to toggle the status of todos, between `active` and `completed`.
+
+First, the reducer have to handle a new action, `TOGGLE_COMPLETE`, whose requirements will be to change the status between `active` and `completed`:
+
+`test/reducer_spec.js`
+
+```javascript
+import { List, Map, fromJS } from "immutable";
+import { expect } from "chai";
+
+import reducer from "../src/reducer";
+
+describe("reducer", () => {
+  // ...
+  it("handles TOGGLE_COMPLETE by changing the status from active to completed", () => {
+    const initialState = fromJS({
+      todos: [
+        { id: 1, text: "React", status: "active" },
+        { id: 2, text: "Redux", status: "active" },
+        { id: 3, text: "Immutable", status: "completed" }
+      ]
+    });
+    const action = {
+      type: "TOGGLE_COMPLETE",
+      itemId: 1
+    };
+    const nextState = reducer(initialState, action);
+    expect(nextState).to.equal(
+      fromJS({
+        todos: [
+          { id: 1, text: "React", status: "completed" },
+          { id: 2, text: "Redux", status: "active" },
+          { id: 3, text: "Immutable", status: "completed" }
+        ]
+      })
+    );
+  });
+
+  it("handles TOGGLE_COMPLETE by changing the status from completed to active", () => {
+    const initialState = fromJS({
+      todos: [
+        { id: 1, text: "React", status: "active" },
+        { id: 2, text: "Redux", status: "active" },
+        { id: 3, text: "Immutable", status: "completed" }
+      ]
+    });
+    const action = {
+      type: "TOGGLE_COMPLETE",
+      itemId: 3
+    };
+    const nextState = reducer(initialState, action);
+    expect(nextState).to.equal(
+      fromJS({
+        todos: [
+          { id: 1, text: "React", status: "active" },
+          { id: 2, text: "Redux", status: "active" },
+          { id: 3, text: "Immutable", status: "active" }
+        ]
+      })
+    );
+  });
+});
+```
+
+In order to make the test pass, we can update the reducer:
+
+`src/reducer.js`
+
+```javascript
+// ...
+function toggleComplete(state, itemId) {
+  // We find the index associated with the itemId
+  const itemIndex = state
+    .get("todos")
+    .findIndex(item => item.get("id") === itemId);
+  // We update the todo at this index
+  const updatedItem = state
+    .get("todos")
+    .get(itemIndex)
+    .update("status", status => (status === "active" ? "completed" : "active"));
+
+  // We update the state to account for the modified todo
+  return state.update("todos", todos => todos.set(itemIndex, updatedItem));
+}
+
+export default function(state = Map(), action) {
+  switch (action.type) {
+    case "SET_STATE":
+      return setState(state, action.state);
+    case "TOGGLE_COMPLETE":
+      return toggleComplete(state, action.itemId);
+  }
+  return state;
+}
+```
+
+In the same vein as the `SET_STATE` action, we need to make the `TodoAppContainer` component aware of this action, so that the `toggleComplete` callback will be passed down to the `TodoItem` component (the one that actually makes the call).
+
+In Redux, there is a standard way to do just that: _Action Creators_.
+
+Action creators are simply functions that return the properly formatted action - and these functions are the ones that are mapped to React `props`.
+
+Let's create our first action creator:
+
+`src/action_creators.js`
+
+```javascript
+export function toggleComplete(itemId) {
+  return {
+    type: "TOGGLE_COMPLETE",
+    itemId
+  };
+}
+```
+
+Now, through a call to the `connect` function in the `TodoAppContainer` component that we already used for fetching the store, we are telling the component to map its `props` callbacks to the action creators of the same name:
+
+`src/components/TodoApp.jsx`
+
+```javascript
+// ...
+import * as actionCreators from "../action_creators";
+export class TodoApp extends React.Component {
+  // ...
+  render() {
+    return (
+      <div>
+        // ... // We use the spread operator for better lisibility
+        <TodoList {...this.props} />
+        // ...
+      </div>
+    );
+  }
+}
+
+export const TodoAppContainer = connect(
+  mapStateToProps,
+  actionCreators
+)(TodoApp);
+```
+
+Restart your web server and refresh your browser: tada! A click on an item now properly toggles its state. And if you look in the Redux dev tools, you can see the action being triggered and the subsequent state update.
+
+### Changing the current filter
+
+_Note: [here](https://github.com/phacks/redux-todomvc/commit/3949d4f38912e4b6b8e60fc4c553614d4076028c) is the relevant commit in the companion repository._
+
+Now that everything is set up, writing up our other actions will be a breeze. We will continue withe the `CHANGE_FILTER` action that will, you guessed it, change the current filter in the state and thus display only the filtered items.
+
+We start by writing our action creator:
+
+`src/action_creators.js`
+
+```javascript
+// ...
+export function changeFilter(filter) {
+  return {
+    type: "CHANGE_FILTER",
+    filter
+  };
+}
+```
+
+Now we write the unit tests for the reducer:
+
+`test/reducer_spec.js`
+
+```javascript
+// ...
+describe("reducer", () => {
+  // ...
+  it("handles CHANGE_FILTER by changing the filter", () => {
+    const initialState = fromJS({
+      todos: [{ id: 1, text: "React", status: "active" }],
+      filter: "all"
+    });
+    const action = {
+      type: "CHANGE_FILTER",
+      filter: "active"
+    };
+    const nextState = reducer(initialState, action);
+    expect(nextState).to.equal(
+      fromJS({
+        todos: [{ id: 1, text: "React", status: "active" }],
+        filter: "active"
+      })
+    );
+  });
+});
+```
+
+And we write the associated reducer function:
+
+`src/reducer.js`
+
+```javascript
+// ...
+function changeFilter(state, filter) {
+  return state.set("filter", filter);
+}
+
+export default function(state = Map(), action) {
+  switch (action.type) {
+    case "SET_STATE":
+      return setState(state, action.state);
+    case "TOGGLE_COMPLETE":
+      return toggleComplete(state, action.itemId);
+    case "CHANGE_FILTER":
+      return changeFilter(state, action.filter);
+  }
+  return state;
+}
+```
+
+Lastly, we need to pass down the `changeFilter` callback to the `TodoTools` component:
+
+`TodoApp.jsx`
+
+```javascript
+// ...
+export class TodoApp extends React.Component {
+  // ...
+  render() {
+    return (
+      <div>
+        <section className="todoapp">
+          // ...
+          <TodoTools
+            changeFilter={this.props.changeFilter}
+            filter={this.props.filter}
+            nbActiveItems={this.getNbActiveItems()}
+          />
+        </section>
+        <Footer />
+      </div>
+    );
+  }
+}
+```
+
+And that's it! The filter selector works perfectly :)
+
+### Item editing
+
+_Note: [here](https://github.com/phacks/redux-todomvc/commit/2a7b1138f778524d4aa7eac193c995258d28c5a3) is the relevant commit in the companion repository._
+
+When the user edits an item, there are actually two actions triggered out of three possible:
+
+- The user enters the editing mode: `EDIT_ITEM`;
+- The user cancels the editing mode (changes are not saved): `CANCEL_EDITING`;
+- The user validates her edition (changes are saved): `DONE_EDITING`
+
+We can write the action creators for the three actions:
+
+`src/action_creators.js`
+
+```javascript
+// ...
+export function editItem(itemId) {
+  return {
+    type: "EDIT_ITEM",
+    itemId
+  };
+}
+
+export function cancelEditing(itemId) {
+  return {
+    type: "CANCEL_EDITING",
+    itemId
+  };
+}
+
+export function doneEditing(itemId, newText) {
+  return {
+    type: "DONE_EDITING",
+    itemId,
+    newText
+  };
+}
+```
+
+Now we can write the unit tests for each of these actions:
+
+`test/reducer_spec.js`
+
+```javascript
+// ...
+describe("reducer", () => {
+  // ...
+  it("handles EDIT_ITEM by setting editing to true", () => {
+    const initialState = fromJS({
+      todos: [{ id: 1, text: "React", status: "active", editing: false }]
+    });
+    const action = {
+      type: "EDIT_ITEM",
+      itemId: 1
+    };
+    const nextState = reducer(initialState, action);
+    expect(nextState).to.equal(
+      fromJS({
+        todos: [{ id: 1, text: "React", status: "active", editing: true }]
+      })
+    );
+  });
+
+  it("handles CANCEL_EDITING by setting editing to false", () => {
+    const initialState = fromJS({
+      todos: [{ id: 1, text: "React", status: "active", editing: true }]
+    });
+    const action = {
+      type: "CANCEL_EDITING",
+      itemId: 1
+    };
+    const nextState = reducer(initialState, action);
+    expect(nextState).to.equal(
+      fromJS({
+        todos: [{ id: 1, text: "React", status: "active", editing: false }]
+      })
+    );
+  });
+
+  it("handles DONE_EDITING by setting by updating the text", () => {
+    const initialState = fromJS({
+      todos: [{ id: 1, text: "React", status: "active", editing: true }]
+    });
+    const action = {
+      type: "DONE_EDITING",
+      itemId: 1,
+      newText: "Redux"
+    };
+    const nextState = reducer(initialState, action);
+    expect(nextState).to.equal(
+      fromJS({
+        todos: [{ id: 1, text: "Redux", status: "active", editing: false }]
+      })
+    );
+  });
+});
+```
+
+And we can now develop the reducer functions that will actually handle the three actions:
+
+`src/reducer.js`
+
+```javascript
+function findItemIndex(state, itemId) {
+  return state.get("todos").findIndex(item => item.get("id") === itemId);
+}
+
+// We can refactor the toggleComplete function to use findItemIndex
+function toggleComplete(state, itemId) {
+  const itemIndex = findItemIndex(state, itemId);
+  const updatedItem = state
+    .get("todos")
+    .get(itemIndex)
+    .update("status", status => (status === "active" ? "completed" : "active"));
+
+  return state.update("todos", todos => todos.set(itemIndex, updatedItem));
+}
+
+function editItem(state, itemId) {
+  const itemIndex = findItemIndex(state, itemId);
+  const updatedItem = state
+    .get("todos")
+    .get(itemIndex)
+    .set("editing", true);
+
+  return state.update("todos", todos => todos.set(itemIndex, updatedItem));
+}
+
+function cancelEditing(state, itemId) {
+  const itemIndex = findItemIndex(state, itemId);
+  const updatedItem = state
+    .get("todos")
+    .get(itemIndex)
+    .set("editing", false);
+
+  return state.update("todos", todos => todos.set(itemIndex, updatedItem));
+}
+
+function doneEditing(state, itemId, newText) {
+  const itemIndex = findItemIndex(state, itemId);
+  const updatedItem = state
+    .get("todos")
+    .get(itemIndex)
+    .set("editing", false)
+    .set("text", newText);
+
+  return state.update("todos", todos => todos.set(itemIndex, updatedItem));
+}
+
+export default function(state = Map(), action) {
+  switch (action.type) {
+    // ...
+    case "EDIT_ITEM":
+      return editItem(state, action.itemId);
+    case "CANCEL_EDITING":
+      return cancelEditing(state, action.itemId);
+    case "DONE_EDITING":
+      return doneEditing(state, action.itemId, action.newText);
+  }
+  return state;
+}
+```
+
+Aaaand it works like a charm in your browser :)
+
+### Clearing completed, adding and deleting items
+
+_Note: [here](https://github.com/phacks/redux-todomvc/commit/c89059a6767903fdf8b9827209f92e1f7385bdb7) is the relevant commit in the companion repository._
+
+Our three remaining actions are the following:
+
+1. `CLEAR_COMPLETED`, that is triggered in the `TodoTools` component and clears completed items from the list;
+2. `ADD_ITEM`, that is triggered in the `TodoHeader` component and add an item with the text entered by the user;
+3. `DELETE_ITEM`, that is called from `TodoItem` and deletes an item
+
+We are now used to the workflow: add the action creators, unit test the reducer and code the logic, and eventually pass down the callback as `props`:
+
+`src/action_creators.js`
+
+```javascript
+// ...
+export function clearCompleted() {
+  return {
+    type: "CLEAR_COMPLETED"
+  };
+}
+
+export function addItem(text) {
+  return {
+    type: "ADD_ITEM",
+    text
+  };
+}
+
+export function deleteItem(itemId) {
+  return {
+    type: "DELETE_ITEM",
+    itemId
+  };
+}
+```
+
+`test/reducer_spec.js`
+
+```javascript
+// ...
+describe("reducer", () => {
+  // ...
+  it("handles CLEAR_COMPLETED by removing all the completed items", () => {
+    const initialState = fromJS({
+      todos: [
+        { id: 1, text: "React", status: "active" },
+        { id: 2, text: "Redux", status: "completed" }
+      ]
+    });
+    const action = {
+      type: "CLEAR_COMPLETED"
+    };
+    const nextState = reducer(initialState, action);
+    expect(nextState).to.equal(
+      fromJS({
+        todos: [{ id: 1, text: "React", status: "active" }]
+      })
+    );
+  });
+
+  it("handles ADD_ITEM by adding the item", () => {
+    const initialState = fromJS({
+      todos: [{ id: 1, text: "React", status: "active" }]
+    });
+    const action = {
+      type: "ADD_ITEM",
+      text: "Redux"
+    };
+    const nextState = reducer(initialState, action);
+    expect(nextState).to.equal(
+      fromJS({
+        todos: [
+          { id: 1, text: "React", status: "active" },
+          { id: 2, text: "Redux", status: "active" }
+        ]
+      })
+    );
+  });
+
+  it("handles DELETE_ITEM by removing the item", () => {
+    const initialState = fromJS({
+      todos: [
+        { id: 1, text: "React", status: "active" },
+        { id: 2, text: "Redux", status: "completed" }
+      ]
+    });
+    const action = {
+      type: "DELETE_ITEM",
+      itemId: 2
+    };
+    const nextState = reducer(initialState, action);
+    expect(nextState).to.equal(
+      fromJS({
+        todos: [{ id: 1, text: "React", status: "active" }]
+      })
+    );
+  });
+});
+```
+
+`src/reducer.js`
+
+```javascript
+function clearCompleted(state) {
+  return state.update("todos", todos =>
+    todos.filterNot(item => item.get("status") === "completed")
+  );
+}
+
+function addItem(state, text) {
+  const itemId =
+    state
+      .get("todos")
+      .reduce((maxId, item) => Math.max(maxId, item.get("id")), 0) + 1;
+  const newItem = Map({ id: itemId, text: text, status: "active" });
+  return state.update("todos", todos => todos.push(newItem));
+}
+
+function deleteItem(state, itemId) {
+  return state.update("todos", todos =>
+    todos.filterNot(item => item.get("id") === itemId)
+  );
+}
+
+export default function(state = Map(), action) {
+  switch (action.type) {
+    // ...
+    case "CLEAR_COMPLETED":
+      return clearCompleted(state);
+    case "ADD_ITEM":
+      return addItem(state, action.text);
+    case "DELETE_ITEM":
+      return deleteItem(state, action.itemId);
+  }
+  return state;
+}
+```
+
+`src/components/TodoApp.jsx`
+
+```javascript
+// ...
+export class TodoApp extends React.Component {
+  // ...
+  render() {
+    return (
+      <div>
+        <section className="todoapp">
+          // We pass down the addItem callback
+          <TodoHeader addItem={this.props.addItem} />
+          <TodoList {...this.props} />
+          // We pass down the clearCompleted callback
+          <TodoFooter
+            changeFilter={this.props.changeFilter}
+            filter={this.props.filter}
+            nbActiveItems={this.getNbActiveItems()}
+            clearCompleted={this.props.clearCompleted}
+          />
+        </section>
+        <Footer />
+      </div>
+    );
+  }
+}
+```
+
+Our TodoMVC app is now complete!
+
+## Wrapping up
+
+This concludes our TDD tutorial on the React, Redux & Immutable stack.
+
+There are however plenty more things to dig if you want to go further, such as:
+
+- [React Redux router](https://github.com/reactjs/react-router-redux) to build complete Single Page Applications
+- Isomorphic Redux for using Redux in the backend, which is extensively covered in [these](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html) [two](https://blog.diacode.com/trello-clone-with-phoenix-and-react-pt-1) tutorials
+- [Gambit](https://github.com/Ghirro/gambit), a small wrapper around Redux to simplify the connections to APIs
+- And [much more](http://redux.js.org/docs/introduction/Ecosystem.html) available on the Redux website!
+
+_Originally published on the [Theodo Blog](https://blog.theodo.fr/2016/03/getting-started-with-react-redux-and-immutable-a-test-driven-tutorial-part-2/)._

@@ -1,0 +1,161 @@
+import { ArticleLayout } from '@/components/ArticleLayout'
+import Image from 'next/image'
+import appcacheFirefoxImage from './appcache-firefox.jpg'
+import appcacheInternalsImage from './appcache-internals.png'
+import updateMessageImage from './update-message.png'
+
+export const meta = {
+  author: 'Nicolas Goutay',
+  date: '2015-04-13',
+  title: 'How To Automatically Update Your Angular Offline Webapps',
+  description:
+    'Offline-first webapps are a gracious way to guarantee a worst-case user experience that can be controlled and fine-tuned by developers.',
+}
+
+export default (props) => <ArticleLayout meta={meta} {...props} />
+
+It is common, for web developers, to assume that users will always use their products in near-optimal situations: a recent browser on a fast device, with a steady WiFi connection. However, when building mobile-first webapps, the last assumption is a dangerous one to make. Network connectivity on mobile devices is all but granted: a poor cellular reception, a subway ride or a remote holiday destination can have disastrous impacts on the user experience.
+
+In this excellent [A List Apart article](https://alistapart.com/article/offline-first), Alex Feyerke notes that developers should “stop treating offline like an error”:
+
+> Stop treating a lack of connectivity like an error. Your app should be able to handle disconnections and get on with business as gracefully as possible.
+
+Offline-first webapps are a gracious way to guarantee a worst-case user experience that can be controlled and fine-tuned by developers. Their implementations usually rely heavily on the [_Application Cache_](https://developer.mozilla.org/en-US/docs/Web/HTML/Using_the_application_cache), an HTML5 flagship feature used to specify which resources must be cached by the browser for the app (or a predefined subset of the app) to keep working without any network connectivity.
+
+I am currently working on a offline-first project, and a problem arose: as the browser cached all static assets (stylesheets, vendor libraries and the AngularJS app), users were not systematically browsing the latest version of the website. This was contradicting the premise of the Agile philosophy, as we wouldn’t have user feedback as quickly as we wished on the recently pushed functionalities.
+
+The solution we envisioned was to prompt the user a message each time a new build was pushed in production, notifying them of the update and inviting them to refresh the page to enjoy the latest version. In this article I will try and explain as precisely as possible the implementation of this feature.
+
+## The cache manifest
+
+The cache manifest is the file that indicates to the browser which folders or files to cache. The browser will only update the cached files (retrieving them from the server) when the cache manifest is modified. It is thus possible to include a commented line in the manifest, and to modify this line in order to notify the browser that the source code has been updated.
+
+For convenience, we used a gulp plugin named [gulp-manifest](https://github.com/hillmanov/gulp-manifest) which programmatically generates a manifest file with each build, and appends to it a commented sha256 hash of all source files. That way, each build will trigger a cache refresh on client browsers.
+
+It is important that the manifest file is served with a particular MIME type : `text/cache-manifest`. Otherwise, browsers will not recognize the manifest and cache the files. Webservers must be configured accordingly (considering that the manifest file has the extension `.appcache`):
+
+- **Nginx** in the `mime.types` file, add the following line: `text/cache-manifest appcache;`
+- **Apache**: in the `.htaccess` file, add the following line: `AddType text/cache-manifest .appcache`
+- **Express**: add the following route:
+
+```coffeescript
+app.get '/*.appcache', (req, res) ->
+  res.header 'Content-Type', 'text/cache-manifest'
+  res.end 'CACHE MANIFEST'
+```
+
+## The Angular directive
+
+We built an Angular directive that shows a non-intrusive alert at the top of the page to notify the user of an update.
+
+The controller runs a routine every minutes, checking the status of the `window.applicationcache` variable. If an update is available, the cache is updated, then the alert is displayed, prompting the user to reload the page for the changes to be applied.
+
+`directive.coffee`:
+
+```coffeescript
+angular.module 'refresh-app'
+.directive 'refreshApp', ->
+  restrict: 'A'
+  templateUrl: 'utils/refresh-app/template.html'
+  controller: 'controller'
+  scope: {}
+  link: ($scope, element, attrs) ->
+    $scope.$watch 'hidden', (newValue) ->
+      return element.slideUp() if newValue
+      element.slideDown() if not newValue
+```
+
+`controller.coffee`:
+
+```coffeescript
+angular.module 'refresh-app'
+.controller 'refreshAppController', ($scope, $timeout, $window) ->
+  $scope.hidden = true
+  appCache = $window.applicationCache
+  $scope.close = ->
+    closed = true
+    $scope.hidden = true
+
+  if appCache and appCache.status isnt (appCache.UNCACHED or appCache.OBSOLETE)
+    appCache.addEventListener 'updateready', ->
+      # Listener for when a new version is available
+      $scope.hidden = false if appCache.status is appCache.UPDATEREADY
+
+      checkForUpdates = -> appCache.update()
+        # Chech every minute if a new version is available
+        $timeout checkForUpdates, 60 * 1000
+
+      checkForUpdates() # Launches the routine
+```
+
+`template.jade`:
+
+```coffee
+.container
+  button.close(
+    type='button'
+    aria-hidden='true'
+    ng-click='close()'
+  ) &times;
+  p A new version of this app is available&emsp;
+  button.refresh-app-btn(onclick='window.location.reload()')
+    i.glyphicon.glyphicon-refresh
+    | Update
+```
+
+A message is now displayed when the app cache was updated:
+
+<Image src={updateMessageImage} alt="" />
+
+## The HTTP cache headers
+
+Cache headers are inserted by the webserver to indicate to the browser which files must not be cached, or the maximum amount of times files can be kept in the cache. In our project, we wanted the browser to cache only the assets files (for offline browsing), **not** API calls (for security reasons). We had to apply cache headers selectively on our webserver, here [Express](http://expressjs.com/):
+
+```coffeescript
+# Assets routes, caching is authorized
+app.use('/assets/', express.static(__dirname+'/../www'))
+app.use(express.static(__dirname+'/../www'))
+
+# Avoid caching API results: apply cache headers
+app.use (req, res, next) ->
+  res.header 'Cache-Control', 'no-cache, no-store, must-revalidate'
+  res.header 'Pragma', 'no-cache'
+  res.header 'Expires', 0
+  next()
+
+# API routes, caching is not authorized
+app.use('/api/v1/', (req, res) ->
+  console.log 'Api calls…'
+```
+
+_Note: the `Pragma` header is the HTTP/1.0 version of the `Cache-Control` header_
+
+In the case where cache headers are still present on static files, a proxy may be intercepting responses. It is then possible to modify the Apache or Nginx configuration to remove the cache headers.
+
+A particular attention must be paid to the `cache-control: no-store` header. Indeed, this header is set alongside with a cache manifest, files will keep being cached on Chrome, Opera and Safari, but not on Firefox.
+
+## Debugging the offline webapp
+
+Browsers offers a set of tools to debug an offline-ready webapp, which can be very practical to detect errors in the manifest file.
+
+### On Chrome
+
+Chrome offers an interface to see which apps are cached by the browser, and for each the details of the cached files.
+
+In the searchbar, enter `chrome://appcache-internals` to display the list of cached apps.
+
+<Image src={appcacheInternalsImage} alt="" />
+
+### On Firefox
+
+Firefox offers a command line interface to nevigate within the application cache.
+
+To open the CLI, enter `<shift><F2>`. The command `help appcache` displays the list of available appcache commands :
+
+<Image src={appcacheFirefoxImage} alt="" />
+
+## Conclusion
+
+Automatic updates are great for both the developers, who benefit from faster feedback on new features, and the users, whose application is always up-to-date. It also eases grealy the testing and development process, as cache must not be emptied each time an update is pushed. A nice addition in our Agile toolbox !
+
+_Originally published on the [Theodo Blog](https://blog.theodo.fr/2015/04/how-to-automatically-update-your-angular-offline-webapps/)._

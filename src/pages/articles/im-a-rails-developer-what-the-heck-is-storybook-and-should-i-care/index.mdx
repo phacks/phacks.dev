@@ -1,0 +1,75 @@
+import { ArticleLayout } from '@/components/ArticleLayout'
+import Image from 'next/image'
+import storybookImage from './storybook.png'
+import bootstrapImage from './bootstrap.png'
+import polarisImage from './polaris.png'
+
+export const meta = {
+  author: 'Nicolas Goutay',
+  date: '2021-10-12',
+  title: 'I’m a Rails developer—what the heck is Storybook, and should I care?',
+  description:
+    'A lightly edited version of our conversation that tries to answer the following questions: what is Storybook? How useful can it be in a Rails project? And maybe most importantly: as a Rails developer, should I care?'
+}
+
+export default (props) => <ArticleLayout meta={meta} {...props} />
+
+A few months back, I wrote an article called [Building a Component Library in Rails With Storybook](https://orbit.love/blog/building-a-component-library-in-rails-with-storybook). Now, for context, I come from a React/frontend-heavy background, so [Storybook](https://storybook.js.org/) is a tool I (and to some extent the React/frontend community at large) am pretty familiar with. So when drafting the article I adopted my point of view: one of a newish Rails developer trying to add a tool they know well to a framework/language they don’t.
+
+It turns out that this article struck a chord with members of the Rails community that had the opposite viewpoint: they are very familiar with Rails, but only heard about Storybook in passing, if at all. Some got curious about Storybook.
+
+One day, [leastbad](https://twitter.com/theleastbad), [StimulusReflex](https://docs.stimulusreflex.com/) co-maintainer and active member of the Rails community, privately reached out after reading the article.
+
+With their permission, what follows is a lightly edited version of our conversation that tries to answer the following questions: what is Storybook? How useful can it be in a Rails project? And maybe most importantly: as a Rails developer, should I care?
+
+## leastbad’s message:
+
+Hey Nicolas!
+
+I first became aware of Storybook about two years ago in the context of helping my Significant Other figure out a React Native task at a new job, and we were both in over our heads.
+
+Storybook felt like this thing that I kept getting really close to understanding why it was good but kept getting confused. For context, I write a lot of documentation and I do a lot of work with Bootstrap themes.
+
+My question would be: how is a Storybook better than, compares to, potentially compliments what I'm much more familiar with, which is a page like [https://getbootstrap.com/docs/5.0/components/buttons/](https://getbootstrap.com/docs/5.0/components/buttons/)
+
+<Image src={bootstrapImage} alt="A screen capture of the documentation of Bootstrap 5’s Button component" />
+
+Like, are these two approaches to conveying the same kind of information, or is there something more fundamental that I'm missing? When I look at the link above, it seems to hit all of the marks: list of components on the left, deep-dive information in the middle, hot links on the right to section headings.
+
+## My response:
+
+Hey @leastbad! Great question, thanks for asking.
+
+I think they are several facets to that. The first would be who the tool is intended for, another would be regarding the actual differences. What follows is my opinion (I’m definitely not an expert on Storybook or writing docs!), but I hope that it’ll provide insights.
+
+With regards to who the tool is intended for, I think that Storybook had an early advantage for product teams (as opposed to maintainers), in that it’s relatively easy to integrate to JavaScript-based codebases (I’ll leave the Rails use case for now as it’s new, and thus less streamlined than React, Vue, etc…). When you’re working in JavaScript land (which I did for around 6 years prior to jump into Rails last year), it’s highly probable that you have some kinds of “components” available in your codebase. That’s the way React (and Vue, etc…) works, and what the docs and best practices encourage you to do.
+
+When the product team (design, engineering, product) reaches a certain size, it’s becoming harder for everyone to have a mental map of the available components, their capabilities (e.g. do we have buttons with icons? do we have multi-selects?), their variants… Storybook provides a relatively easy path to showcasing them all somewhere, with the ability to “play around” with them. Done right, and you have a single source of truth for your UI components—strengthening UI coherence around the app, facilitating design/eng. discussions, etc.
+
+<Image src={storybookImage} alt="A screenshot of our Storybook at Orbit. You can see a Button component, along with all available controls, which are variants of the component. Controls are interactive, meaning you can easily see what the component looks like for a certain variant." />
+
+Most teams I worked on weren’t willing to take the time to create “internal docs” as polished as the Bootstrap one. Storybook offers a version of that, with little friction, and for relatively cheap.
+
+With more and more teams adopting Storybook for their “internal UI docs” in the JS universe, it became some sort of _lingua franca_ for JavaScript components. It followed that a lot of JavaScript-based UI libraries (thinking about Chakra UI, Shopify Polaris), or React/Vue/Angular “widgets” (thinking about AirBnB Dates) used Storybook for their “external UI docs”.
+
+If I’m considering an open-source library for, say, a React date picker, a Storybook will make me feel right at home as I’m familiar with this type of docs, I can get the properties at a glance, play around with it, etc…
+
+Storybook is to JavaScript components/libraries what e.g. Relish is for some gems. A familiar way of presenting what your thing does.
+
+<Image src={polarisImage} alt="The Shopify Polaris docs are available as a Storybook. As a side note, Storybook provides automated accessibility tests for their components." />
+
+It would make little sense for Bootstrap to host their docs on Storybooks as you can’t easily manipulate CSS classes there, you’re expected to have “properties”, meaning JavaScript variables, you can tweak. Which is the case for JavaScript components, and also (although that’s still quite experimental) the case for [View Components](https://viewcomponent.org/) in Rails.
+
+Regarding the _actual differences_ between the Bootstrap docs and a Storybook, I’d say:
+
+- Storybook is putting the components first, and the docs second—the Bootstrap docs are the other way around;
+- Storybook is interactive, in that you can tweak most, if not all parameters of the component you’re looking at. Bootstrap docs only show you the “happy path”, e.g. I can’t easily see how my button will look like if the text inside is 2 characters long, or 240;
+Storybook allows for (manually) testing all kinds of permutations. On the Bootstrap docs, I can’t really see how an outlined, red, large, disabled button looks. Taking one of our components as an example (a multi select: [https://app.orbit.love/_storybook/index.html?path=/story/interactive-newmultiselect--grouped](https://app.orbit.love/_storybook/index.html?path=/story/interactive-newmultiselect--grouped)), being able to easily test permutations and edge cases allowed us to catch bugs earlier.
+
+I’m not saying that Storybook is better (I do believe that what matters most with documentation is the content, not the medium), only outlining some philosophical and/or feature differences. I’ll add though that Storybook gives you most of what you need to create well-considered docs for your ViewComponents, with little additional work.
+
+## Conclusion
+
+I hope this impromptu Q&A helped you get a better understanding of Storybook, and what it can offer to a Rails codebase in conjunction with ViewComponents. If you’d like to try it out yourself, feel free to dive into the article that sparked all this, [Building a Component Library in Rails With Storybook](https://orbit.love/blog/building-a-component-library-in-rails-with-storybook)!
+
+_Originally published on the [Orbit Blog](https://orbit.love/blog/im-a-rails-developer-what-the-heck-is-storybook-and-should-i-care)._

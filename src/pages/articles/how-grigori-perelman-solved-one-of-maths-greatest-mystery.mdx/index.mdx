@@ -1,0 +1,104 @@
+import { ArticleLayout } from '@/components/ArticleLayout'
+import Image from 'next/image'
+import portraitImage from './portrait.jpg'
+import ricciFlowImage from './ricci-flow.jpg'
+import simplyConnectedManifoldImage from './simply-connected-manifold.jpg'
+
+export const meta = {
+  author: 'Nicolas Goutay',
+  date: '2014-01-16',
+  title: 'How Grigori Perelman solved one of Maths greatest mystery',
+  description:
+    'And why he declined the Fields Medal and a $1,000,000 prize',
+}
+
+export default (props) => <ArticleLayout meta={meta} {...props} />
+
+<Image src={portraitImage} alt="A photo portrait of Grigori Perelman" />
+
+The Poincaré Conjecture, formulated in 1904 by the French mathematician Poincaré, remained one of the most challenging open questions in the twentieth century, until it was proven in 2002 by Grigori Perelman. It has been considered by the Clay Mathematics Institute as one of the seven Millennium Prize Problems that, if ever solved, would grant a one-million dollar prize. Grigori Perelman was attributed a Fields Medal for « his contributions to geometry and his revolutionary insights » that led to his outstanding proof. He refused both the prize and the medal. My researches showed me that the history of the conjecture and the mathematical path that led to Perelman’s proof is, besides related, at least as interesting as Perelman’s peculiar personality and particular conception of how Mathematics should be conceived and studied. As topology, the field of Mathematics in which the Poincaré takes place, is rather a topic of interest than my speciality, the mathematical developments in this article will not be technical, but enough to comprehend the extend of the Conjecture and the idea behind Perelman’s proof — and do not, in my opinion, require any advanced mathematical knowledge from the reader.
+
+## A brief introduction to topology and the Poincaré Conjecture
+
+Topology is the mathematical study of shapes and spaces, and the will to define these precisely. Donald O’Sea, an American mathematics professor, tried to explain topology in these terms:
+
+<figure>
+	<blockquote>
+		<p>We know what it is to be in love or to feel pain, and we don’t need precise definitions to communicate. The objects of mathematics lie outside common experience, however. If one doesn’t define these objects carefully, one cannot manipulate them meaningfully or talk to others about them.</p>
+		<footer>
+			<cite>— Donald O’Sea</cite>
+		</footer>
+	</blockquote>
+</figure>
+
+The main idea behind this major field of mathematics is that when studying an object, it is its properties that are important, not the object itself — and if several objects share the same properties, they should be studied along, and the results would scale to all the objects that share these properties (we call these objects homeomorphic to one another). The first trace of topology in mathematics dates to Euler demonstration that no route could cross the seven bridges of Königsberg exactly once. Euler paper was not important only applied to the city of Königsberg, but because it also applied to every configuration that was homeomorphic to it.
+
+To a topologist, a bun and a sphere are the same, as are an oval and a circle. Indeed, for each of these pairs, there is a transformation that leads from one to the other without changing the object’s deep properties. However, a sphere and a doughnut are not homeomorphic to one another: no matter how we transform the sphere in a topological sense, we cannot create the hole of the doughnut without changing the sphere’s properties.
+
+The Poincaré Conjecture is the following:
+
+_Every simply connected, closed 3-manifold is homeomorphic to a 3-sphere._
+
+Let’s consider a much simpler version of this conjecture, by shifting from a three-dimensional object to a two-dimensional one. Indeed, in topology, the dimensions are not understood in the same way as in the other fields of mathematics. A sphere, as commonly pictured, is called a 2-sphere and is seen as the surface of a ball seen in a three-dimensional space. A three-dimensional sphere is the surface of a four-dimensional ball. Thus, a 3-sphere in a four-dimensional space is not easy for one to picture as it requires an additional level of abstraction: the average human mind, used to his three-dimensional perception, just cannot.
+
+In our simplified view, the sphere considered here is the same as our usual sphere, and a manifold can be seen as a mathematical shape (like a blob, a bun, a cube or a sphere). We say that the manifold is closed if there is no hole on his surface or, more precisely, that it has no boundaries. We say it is simply connected if every loop can be continuously tightened to a point: let’s imagine that we wrap a rubber band around a sphere, we can then picture it tighten and tighten while shifting on the sphere, up to the point that it becomes a mere point.
+
+<Image src={simplyConnectedManifoldImage} alt="A simply connected manifold" />
+
+In two dimensions, the Conjectures says that a blob, a bun or a pancake are all homeomorphic to a sphere, which is a basic result of topology. However, in three dimensions, this result is far from trivial, and has boggled mathematicians’ minds for nearly a century.
+
+## Unfruitful attempts at solving the Poincaré
+
+Although the Conjecture was made in the early twentieth century, the first interesting results began to appear in its second half. As usually in topology (or some other fields of mathematics), when a hypothesis shows some difficulties to be proven, one method is to try and prove it in other dimensions. We saw that in two dimensions it was easy, but what about dimensions higher than three?
+
+In 1960, John Stallings, an American mathematician, published a proof for dimensions higher that seven. Later, Stephen Smale, managed to find another way to prove the Conjecture for dimensions higher than 5. Many other mathematicians published proofs, with more or less imagination and success, but none was approaching any further the dimension three at this time. An interesting fact, John Stallings, in 1966 published a paper named « How Not To Solve The Poincaré Conjecture », with this comment:
+
+<figure>
+	<blockquote>
+		<p>I have committed the sin of falsely proving Poincaré’s Conjecture. Now, in hope of deterring others from making similar mistakes, I shall describe my mistaken proof. Who knows but that somehow a small change, a new interpretation, and this line of proof may be rectified!</p>
+		<footer>
+			<cite>— John Stallings</cite>
+		</footer>
+	</blockquote>
+</figure>
+
+Things moved slowly until the 1980s, where many new leads were found. In 1982, Michael Freedman won a Fields Medal for his proof of the Poincaré in dimension four. Another topologist, William Thurston, came up with another conjecture in 1982, called the geometrization conjecture. If this conjecture was proven, the Poincaré would follow. This kickstarted a renewed interest in the Poincaré, and draw the attention on the work of Hamilton, one of the best American topologists in the second half of the century, who made a breakthrough in his attempt to prove the conjecture in three dimensions.
+
+His work relied on the well-known notion of curvature, and the fact that a sphere had, as a basic quality, a positive and constant one. Thus, if one had a way to measure the curvature of an unidentifiable object, and to keep measuring it while reshaping this object, then one may, eventually, get to the point at which this object would have a positive and constant curvature. It would then be, by nature, a sphere, and the conjecture would be proven.
+
+Hamilton managed to create an adequate measure, and to study its variations while reshaping the object. The process of transforming the metric is called the Ricci flow (see illustration below). Hamilton managed to prove that the curvature would stay positive, but he got struck when studying its variations: it could not prove that it stayed constant. Indeed, when reshaping the blob, the Ricci flow would sometimes encounter a singularity — that is, an area of the blob that would deviate from the behavior the flow could handle. The idea of Hamilton, later reused by Perelman, was to fix these problems by hand, meaning that the flow would be halted, the singularity treated with a specially tailored function, and the flow would be resumed — this process is called Ricci flow with surgery. However, Hamilton could not prove that this operation could work no matter what singularity developed on the blob, nor that he had identified them all. In addition, his program relied on the assumption that the curvature had to be uniformly bounded: a fair assumption maybe, but an unproven one.
+
+<Image src={ricciFlowImage} alt="An illustration of the Ricci Flow" />
+
+These theoretical problems completely halted his progress, but the program Hamilton developed turned out to be the fertile soil on which Perelman’s proof — and genius — would thrive.
+
+## Grigori Perelman and his way to the proof
+
+Grigori Perelman was born in 1966 in Saint Petersburg. Showing excellent math skills at the age of 10, his mother enrolled him in a math club supervised by Sergei Rukshin, a then 19-year-old, outstanding mathematics teacher, who excelled at teaching young geniuses. Perelman’s natural abilities were intensively stimulated at the club and he rapidly became obvious that he was not only gifted, but also had a highly systematizing mind that could solve nearly any problem without even writing something. According to Rukshin, his teacher and closest friend, he showed no interest in anything except mathematics, and could not accept the idea that the world and human relationship were not as perfectly organized and defined as mathematics are. As an example, he has always refused to believe that there was a crawling antisemitism in nearly every aspect of the Soviet Russia (including education and scientific research), or any antisemitism anywhere, as it was not a rational behavior. Anyway, his exceptional capabilities allowed him to get in the USSR team for the International Mathematics Olympiads (despite his jewishness) and stroke a perfect score and a gold medal in 1982. This prize allowed him to be one of the two jewish students allowed to study at the prestigious School of Mathematics and Mechanics of the Leningrad State University. There, he met one of the greatest Russian mathematician of the time Aleksandr Aleksandrov, that introduced him to geometry and supervised his Ph.D dissertation.
+
+After the fall of the Iron Curtain, Perelman undertook a long trip to US universities and was granted several research positions. There he began to work on topology and showed some interest in the Ricci flow. The first scientific accomplishment of Perelman was the proof of the Soul conjecture in 1993. The Soul conjecture stated that one can deduce the properties of a mathematical object from only small regions of these objects, called the soul. Previous attempts resulted in long, highly technical papers that proved only parts of the conjecture. Perelman’s paper was only four pages long, and struck many mathematicians by its apparent simplicity: the « trick » he used had been in the public domain for twenty years.
+
+This first success in Perelman’s career drew the attention of the most prestigious universities: Princeton and Stanford offered him a professorship, that he refused. He instead returned to Russia in the Steklov Institute in Saint Petersburg in 1995 in order to pursue his research in all discretion. And from 1995 to November 2002, he worked alone on the Poincaré’s Conjecture, cutting off nearly all contact with the mathematics community.
+
+In these seven years, Perelman was able to overcome the difficulties that crushed Hamilton’s hopes of finding the proof. First, he showed the assumption that the curvature is uniformly bounded was correct, because in the particular space of the proof, it simply is always the case. Second, he showed that the singularities would always appear in the same precise case (when the flow would grow too rapidly), and conceived a function that would be effective against all of them. He even proved that some of the singularities Hamilton had identified would simply never occur. In November 2002, Perelman posted on the Internet the first of three preprints containing his proof of the Poincaré. And, in the same time, of Thurston’s Geometrization Conjecture.
+
+## The aftermath
+
+As aforementioned, Perelman posted his preprints on the Internet (on arXiv.org, a scientific archive for preprints, to be more precise), but he didn’t, in any way, submit them for publishing in a scientific journal. He was indeed reluctant to the idea that someone else could review his paper, as he was absolutely sure about their correctness. Another noticeable fact was about the articles themselves, that contained no explanations or digressions in any way — Perelman said that he felt no need to explain, that his proof was self-sufficient. Some merely technical details were also absent from the proof.
+
+He only gave a round of conferences in the US about his proof, and retired again in his motherland to hide from the media, whose interest had arisen with the question of the one-million dollar prize.
+
+As we know, the process of submitting to a scientific journal has, besides the diffusion of one’s results to the community, the aim of verifying those results. Here, such an approach was made impossible by Perelman, so some independent groups of scholars set at the highly difficult task to understand, complete, verify, and explain his work. One of these groups, formed by Chinese mathematicians Cao and Zhu, even tried to take advantages of the gaps in the proof to get the credit — they claimed in their article that « this proof should be considered as the crowning achievement of the Hamilton-Perelman theory of Ricci flow ». This stirred some agitation in the community (one shall not forget that a lot of money was involved at this moment), but the Chinese scientists soon retracted (partly because plagiarism had been detected in their article) and accepted to let Perelman and Hamilton have the credit for the proof.
+
+By 2006, the proof has been validated by all these groups. Science magazine recognized it as the « Breakthrough of the Year », and it was the first mathematical work to obtain this distinction. Both the Fields committee and the Clay Institute agreed on rewarding Perelman. He is the first and only one to have solved one of the Millennium Problems and, according to many, this situation may not change for a long time. He is also the first and only to have declined both the Fields Medal and the Millennium prize. His justification highlights both his peculiar personality and his deep commitment to mathematics for their own sake:
+
+<figure>
+	<blockquote>
+		<p>I’m not interested in money or fame. I don’t want to be on display like an animal in a zoo. I’m not a hero of mathematics. I’m not even that successful; that is why I don’t want to have everybody looking at me.</p>
+		<footer>
+			<cite>— Grigori Perelman</cite>
+		</footer>
+	</blockquote>
+</figure>
+
+_Originally published on [Medium](https://medium.com/@phacks/how-grigori-perelman-solved-one-of-maths-greatest-mystery-89426275cb7)._
