@@ -45,7 +45,7 @@ export default function Uses() {
               Once I dipped my toes into M1-land I never looked back. This beast
               never fails to impress me.
             </Tool>
-            <Tool title="Samsung 4KSpace Monitor — 32”">
+            <Tool title="32” Samsung 4K Space Monitor">
               I am working from a tiny desk at home, so space is an important
               factor when I’m looking at monitor. The clamp mechanism saves
               up precious footprint, and the screen is really nice.
@@ -97,6 +97,10 @@ export default function Uses() {
             <Tool title="ScreenFlow">
               While I’m probably only using 10% of its capacities, ScreenFlow is a
               handy video editing tool I’m using to record presentations.
+            </Tool>
+            <Tool title="1Password">
+              Few tools are as essential to my life as 1Password. Investing early in a
+              good password manager was easily one of the best decisions I took long ago.
             </Tool>
           </ToolsSection>
         </div>
