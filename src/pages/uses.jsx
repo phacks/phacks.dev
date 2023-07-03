@@ -32,84 +32,71 @@ export default function Uses() {
         <title>Uses — Nicolas Goutay</title>
         <meta
           name="description"
-          content="Software I use, gadgets I love, and other things I recommend."
+          content="Things I use to make my day better."
         />
       </Head>
       <SimpleLayout
-        title="Software I use, gadgets I love, and other things I recommend."
-        intro="I get asked a lot about the things I use to build software, stay productive, or buy to fool myself into thinking I’m being productive when I’m really just procrastinating. Here’s a big list of all of my favorite stuff."
+        title="Things I use to make my day better."
+        intro="A growing collection of hardward and software I find myself using often, and/or with delight."
       >
         <div className="space-y-20">
           <ToolsSection title="Workstation">
-            <Tool title="16” MacBook Pro, M1 Max, 64GB RAM (2021)">
-              I was using an Intel-based 16” MacBook Pro prior to this and the
-              difference is night and day. I’ve never heard the fans turn on a
-              single time, even under the incredibly heavy loads I put it
-              through with our various launch simulations.
+            <Tool title="14” MacBook Pro, M1 Max, 64GB RAM (2021)">
+              Once I dipped my toes into M1-land I never looked back. This beast
+              never fails to impress me.
             </Tool>
-            <Tool title="Apple Pro Display XDR (Standard Glass)">
-              The only display on the market if you want something HiDPI and
-              bigger than 27”. When you’re working at planetary scale, every
-              pixel you can get counts.
+            <Tool title="Samsung 4KSpace Monitor — 32”">
+              I am working from a tiny desk at home, so space is an important
+              factor when I’m looking at monitor. The clamp mechanism saves
+              up precious footprint, and the screen is really nice.
             </Tool>
-            <Tool title="IBM Model M SSK Industrial Keyboard">
-              They don’t make keyboards the way they used to. I buy these any
-              time I see them go up for sale and keep them in storage in case I
-              need parts or need to retire my main.
+            <Tool title="Sonos One SL">
+              The entry-level Sonos speaker makes for a great speaker on my desk,
+              though I’m considering an upgrade to the Era 100 for the line input.
             </Tool>
-            <Tool title="Apple Magic Trackpad">
-              Something about all the gestures makes me feel like a wizard with
-              special powers. I really like feeling like a wizard with special
-              powers.
-            </Tool>
-            <Tool title="Herman Miller Aeron Chair">
-              If I’m going to slouch in the worst ergonomic position imaginable
-              all day, I might as well do it in an expensive chair.
+            <Tool title="Elgato Wave:1">
+              An essential buy at the beginning of the pandemic as work and community
+              events now required folks to basically invest in a home studio.
             </Tool>
           </ToolsSection>
           <ToolsSection title="Development tools">
-            <Tool title="Sublime Text 4">
-              I don’t care if it’s missing all of the fancy IDE features
-              everyone else relies on, Sublime Text is still the best text
-              editor ever made.
+            <Tool title="Visual Studio Code">
+              As much as I yearn to use NeoVim as my regular code editor, I always
+              end back up in the comfort of VS Code (in Vim mode). It’s snappy,
+              feature-rich but not overly complex, and familiar. VS Code is my
+              comfort-food for software editing.
             </Tool>
-            <Tool title="iTerm2">
-              I’m honestly not even sure what features I get with this that
-              aren’t just part of the macOS Terminal but it’s what I use.
+            <Tool title="iTerm2 & Tmux">
+              iTerm2 is the first piece of software I install on a new computer.
+              Reliable to the point I’m forgetting it’s a software I’m using all day,
+              every day, and it never disappoint. I use Tmux and its keyboard shortcuts
+              to manage windows and panes in the terminal—and tmuxinator to make
+              starting my working days a matter of seconds.
             </Tool>
             <Tool title="TablePlus">
-              Great software for working with databases. Has saved me from
-              building about a thousand admin interfaces for my various projects
-              over the years.
+              My favorite database-related tool, by a long shot. It’s intuitive,
+              beautifully made, and fast. A must if you find yourself poking at
+              Postgres frequently.
             </Tool>
           </ToolsSection>
           <ToolsSection title="Design">
-            <Tool title="Figma">
-              We started using Figma as just a design tool but now it’s become
-              our virtual whiteboard for the entire company. Never would have
-              expected the collaboration features to be the real hook.
+            <Tool title="Figma & FigJam">
+              While I started my (modest) UI/UX endeavors in Sketch, I find that
+              the web-based Figma makes collaborating much easier. FigJam is my go-to
+              tool for rapid prototyping, whiteboarding and diagramming.
             </Tool>
           </ToolsSection>
           <ToolsSection title="Productivity">
-            <Tool title="Alfred">
-              It’s not the newest kid on the block but it’s still the fastest.
-              The Sublime Text of the application launcher world.
+            <Tool title="CleanShot X">
+              The best screenshot and screen recording utility on macOS, bar none.
             </Tool>
-            <Tool title="Reflect">
-              Using a daily notes system instead of trying to keep things
-              organized by topics has been super powerful for me. And with
-              Reflect, it’s still easy for me to keep all of that stuff
-              discoverable by topic even though all of my writing happens in the
-              daily note.
+            <Tool title="Tuple">
+              Leagues ahead of Zoom and Google Meet when pair-programming. Intuitive
+              yet powerful, and the video quality is no joke.
             </Tool>
-            <Tool title="SavvyCal">
-              Great tool for scheduling meetings while protecting my calendar
-              and making sure I still have lots of time for deep work during the
-              week.
-            </Tool>
-            <Tool title="Focus">
-              Simple tool for blocking distracting websites when I need to just
-              do the work and get some momentum going.
+            <Tool title="ScreenFlow">
+              While I’m probably only using 10% of its capacities, ScreenFlow is a
+              handy video editing tool I’m using to record presentations.
             </Tool>
           </ToolsSection>
         </div>
