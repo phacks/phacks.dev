@@ -47,6 +47,8 @@ test('navigation opens an article and renders MDX', async ({
   await expect(page.locator('main article h1')).toBeVisible()
   await expect(page.locator('main article .prose')).not.toBeEmpty()
   await expect(page).toHaveTitle(/Nicolas Goutay/)
+  await page.getByRole('button', { name: 'Go back to articles' }).click()
+  await expect(page).toHaveURL('/articles')
   expect(errors).toEqual([])
 })
 

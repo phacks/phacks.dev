@@ -6,6 +6,9 @@ import rehypePrism from 'rehype-prism-plus'
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'mdx'],
   reactStrictMode: true,
+  experimental: {
+    scrollRestoration: true,
+  },
 }
 
 const withMDX = nextMDX({

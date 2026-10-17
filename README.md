@@ -55,6 +55,9 @@ and mobile navigation, article rendering, the Work section, dark mode, public
 pages, RSS feeds, every article URL, and the 404 response. To inspect the production
 build manually, run `npm run start`.
 
+To run the same tests against an accessible deployed preview, set
+`PLAYWRIGHT_BASE_URL=https://your-preview.vercel.app npm run test:e2e`.
+
 Development and production explicitly use Webpack because article discovery uses
 dynamic MDX imports and the MDX pipeline has JavaScript remark/rehype plugins.
 `next lint` was removed in Next.js 16; linting now uses ESLint’s flat configuration.
