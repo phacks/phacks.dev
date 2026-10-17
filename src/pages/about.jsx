@@ -4,11 +4,7 @@ import Link from 'next/link'
 import clsx from 'clsx'
 
 import { Container } from '@/components/Container'
-import {
-  GitHubIcon,
-  LinkedInIcon,
-  TwitterIcon,
-} from '@/components/SocialIcons'
+import { GitHubIcon, LinkedInIcon, TwitterIcon } from '@/components/SocialIcons'
 import portraitImage from '@/images/portrait.jpg'
 
 function SocialLink({ className, href, children, icon: Icon }) {
@@ -59,21 +55,21 @@ export default function About() {
             </div>
           </div>
           <div className="lg:order-first lg:row-span-2">
-            <h1 className="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
+            <h1 className="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
               I’m Nicolas Goutay, and I build stuff for the web.
             </h1>
             <div className="mt-6 space-y-7 text-base text-zinc-600 dark:text-zinc-400">
               <p>
-                I’m Nicolas, a Staff Software Engineer. I’m French, originally
-                from Carcassonne (a small-ish town in Southern France)—I bounced
-                back and forth between France, Sweden and the UK for a bit then
+                I’m Nicolas, CTO at Swaive. I’m French, originally from
+                Carcassonne (a small-ish town in Southern France)—I bounced back
+                and forth between France, Sweden and the UK for a bit then
                 settled in Paris about ten years ago.
               </p>
               <p>
-                I’ve been building for the web for about fifteen years (ten of those
-                professionally), in a variety of languages and contexts. My main
-                language for the past three years has been Ruby on Rails, for
-                which I have a deep appreciation.
+                I’ve been building for the web for about fifteen years (ten of
+                those professionally), in a variety of languages and contexts.
+                My main language for the past three years has been Ruby on
+                Rails, for which I have a deep appreciation.
               </p>
               <p>
                 I’m interested in performance, accessibility, maintainability,
@@ -81,9 +77,15 @@ export default function About() {
                 I try to build enjoyable products—for all the parties involved.
               </p>
               <p>
-                The picture on this page was taken serendipitously in
-                Paris by a street photographer. I like it. Credits:
-                <a href="https://www.instagram.com/ajapictures/?hl=en" class="text-teal-500 hover:underline">@ajapictures</a>.
+                The picture on this page was taken serendipitously in Paris by a
+                street photographer. I like it. Credits:
+                <a
+                  href="https://www.instagram.com/ajapictures/?hl=en"
+                  class="text-teal-500 hover:underline"
+                >
+                  @ajapictures
+                </a>
+                .
               </p>
             </div>
           </div>
@@ -92,10 +94,18 @@ export default function About() {
               <SocialLink href="https://twitter.com/phacks" icon={TwitterIcon}>
                 Follow on Twitter
               </SocialLink>
-              <SocialLink href="https://github.com/phacks" icon={GitHubIcon} className="mt-4">
+              <SocialLink
+                href="https://github.com/phacks"
+                icon={GitHubIcon}
+                className="mt-4"
+              >
                 Follow on GitHub
               </SocialLink>
-              <SocialLink href="https://www.linkedin.com/in/nicolas-goutay-4b984258/" icon={LinkedInIcon} className="mt-4">
+              <SocialLink
+                href="https://www.linkedin.com/in/nicolas-goutay-4b984258/"
+                icon={LinkedInIcon}
+                className="mt-4"
+              >
                 Follow on LinkedIn
               </SocialLink>
               <SocialLink

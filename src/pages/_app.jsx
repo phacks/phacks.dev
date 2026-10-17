@@ -1,20 +1,21 @@
-import { useEffect, useRef } from 'react'
-import { Analytics } from '@vercel/analytics/react';
+import { useState } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 
 import '@/styles/tailwind.css'
-import 'focus-visible'
 
 function usePrevious(value) {
-  let ref = useRef()
-
-  useEffect(() => {
-    ref.current = value
-  }, [value])
-
-  return ref.current
+  const [history, setHistory] = useState({
+    current: value,
+    previous: undefined,
+  })
+  if (value !== history.current) {
+    setHistory({ current: value, previous: history.current })
+    return history.current
+  }
+  return history.previous
 }
 
 export default function App({ Component, pageProps, router }) {

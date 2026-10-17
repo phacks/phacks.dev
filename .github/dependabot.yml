@@ -1,0 +1,15 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      next:
+        patterns: ['next', '@next/*', 'eslint-config-next']
+      react:
+        patterns: ['react', 'react-dom']
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

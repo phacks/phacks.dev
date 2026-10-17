@@ -1,4 +1,4 @@
-import glob from 'fast-glob'
+import { glob } from 'node:fs/promises'
 import * as path from 'path'
 
 async function importArticle(articleFilename) {
@@ -13,9 +13,18 @@ async function importArticle(articleFilename) {
 }
 
 export async function getAllArticles() {
-  let articleFilenames = await glob(['*.mdx', '*/index.mdx'], {
-    cwd: path.join(process.cwd(), 'src/pages/articles'),
-  })
+  const directory = path.join(process.cwd(), 'src/pages/articles')
+  const entries = await Array.fromAsync(
+    glob(['*.mdx', '*/index.mdx'], {
+      cwd: directory,
+      withFileTypes: true,
+    }),
+  )
+  const articleFilenames = entries
+    .filter((entry) => entry.isFile())
+    .map((entry) =>
+      path.relative(directory, path.join(entry.parentPath, entry.name)),
+    )
 
   let articles = await Promise.all(articleFilenames.map(importArticle))
 
