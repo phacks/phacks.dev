@@ -3,6 +3,10 @@ import { Analytics } from '@vercel/analytics/react'
 
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import {
+  isCalendaronsRoute,
+  excludeCalendaronsAnalytics,
+} from '@/lib/calendaronsAnalytics'
 
 import '@/styles/tailwind.css'
 
@@ -35,7 +39,9 @@ export default function App({ Component, pageProps, router }) {
         </main>
         <Footer />
       </div>
-      <Analytics />
+      {!isCalendaronsRoute(router.pathname) && (
+        <Analytics beforeSend={excludeCalendaronsAnalytics} />
+      )}
     </>
   )
 }

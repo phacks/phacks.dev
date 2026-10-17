@@ -1,0 +1,58 @@
+{
+  "articles": [
+    {
+      "id": "sync",
+      "title": "Mes évènements ne se synchronisent pas",
+      "symbol": "icloud",
+      "paragraphs": [
+        "Dans Réglages → iCloud, vérifiez que Synchroniser avec iCloud est activé, puis choisissez Synchroniser maintenant. Vos appareils doivent utiliser le même compte Apple pour retrouver votre calendrier personnel.",
+        "Vous pouvez continuer à utiliser Calendarons hors ligne. Vos modifications restent sur cet appareil et seront envoyées à iCloud lorsque la connexion sera rétablie. La date de dernière synchronisation vous aide à vérifier la reprise.",
+        "Si le problème persiste, consultez le message affiché dans la section iCloud. Vérifiez aussi votre connexion et l’espace disponible dans iCloud. Si le compte Apple a changé, reconnectez-vous à iCloud avec le compte Apple utilisé pour ce calendrier.",
+        "Ne désinstallez pas l’app pour tenter de rétablir la synchronisation : des modifications peuvent encore être présentes uniquement sur cet appareil. Contactez le développeur si vous êtes bloqué."
+      ]
+    },
+    {
+      "id": "partner",
+      "title": "Partager avec mon partenaire",
+      "symbol": "person.2",
+      "paragraphs": [
+        "Dans Réglages → Partenaire, choisissez Inviter votre partenaire. Saisissez l’adresse e-mail de son compte Apple, ou choisissez une personne dans Contacts. Vous pouvez corriger l’adresse avant de préparer et d’envoyer le lien.",
+        "Votre partenaire doit installer Calendarons, se connecter à iCloud avec le compte invité, puis ouvrir le lien pour accepter l’invitation. Une seule personne peut être votre partenaire.",
+        "Privé : vous seul voyez l’évènement. Visible : votre partenaire voit son nom et ses détails, mais vous seul pouvez le modifier. Commun : vous pouvez tous les deux le modifier ou le supprimer. Seul son créateur peut changer sa visibilité. Vos évènements restent privés par défaut.",
+        "Vous pouvez arrêter le partage depuis Réglages → Partenaire. Vous conservez vos évènements et les évènements Communs en privé. Les évènements Visibles de votre partenaire disparaissent de votre calendrier. Une confirmation précède l’arrêt du partage."
+      ]
+    },
+    {
+      "id": "notifications",
+      "title": "Je ne reçois pas les notifications",
+      "symbol": "bell",
+      "paragraphs": [
+        "Calendarons peut vous prévenir de la réponse à votre invitation et des évènements Visibles ou Communs ajoutés par votre partenaire. Les déplacements, changements d’horaire et suppressions déclenchent une alerte uniquement pour les évènements Communs. Les évènements privés et les simples changements de nom restent silencieux. Ce ne sont pas des rappels avant vos rendez-vous.",
+        "Après l’envoi d’une invitation, vous pouvez activer les notifications pour recevoir la réponse. Vous pouvez aussi les activer dans Réglages → Partenaire. Si elles sont désactivées ou silencieuses, Ouvrir les réglages des notifications permet de modifier leur présentation sur cet appareil. Vérifiez aussi qu’un mode de concentration ne masque pas les alertes.",
+        "Les notifications passent par iCloud et peuvent arriver avec un délai. Touchez une alerte d’ajout ou de déplacement pour ouvrir l’évènement à sa date actuelle. Une alerte de suppression ouvre le calendrier à la date de l’évènement supprimé. Retrouvez aussi les changements dans Réglages → Partenaire → Activité partagée."
+      ]
+    },
+    {
+      "id": "recovery",
+      "title": "Retrouver un évènement supprimé",
+      "symbol": "arrow.uturn.backward",
+      "paragraphs": [
+        "Juste après une suppression, vous pouvez essayer Annuler : secouez votre iPhone ou iPad si Secouer pour annuler est activé, ou utilisez Édition → Annuler (⌘Z) sur Mac. L’historique d’annulation n’est pas conservé après la fermeture de l’app. Une modification faite entre-temps par votre partenaire peut empêcher l’annulation.",
+        "Si vous avez une sauvegarde, ouvrez Réglages → Sauvegardes → Restaurer une sauvegarde. La section Copies de sécurité apparaît lorsque Calendarons a conservé des copies, notamment avant une restauration ou certains conflits iCloud. Il n’y a pas de corbeille conservant chaque évènement supprimé.",
+        "Restaurer remplace votre calendrier personnel et, si iCloud est activé, synchronise ce remplacement avec vos autres appareils. Vérifiez l’aperçu avant de confirmer. Une copie du calendrier actuel est conservée ; le partage en cours n’est pas remplacé.",
+        "Sans annulation disponible ni sauvegarde contenant l’évènement, la récupération n’est pas garantie. En cas de doute, contactez le développeur avant de restaurer."
+      ]
+    },
+    {
+      "id": "contacts",
+      "title": "Comment sont utilisés mes contacts ?",
+      "symbol": "person.crop.rectangle",
+      "paragraphs": [
+        "Calendarons utilise vos contacts pour afficher leurs anniversaires et reconnaître votre partenaire.",
+        "Les noms de votre profil et de votre partenaire peuvent se synchroniser entre vos appareils dans votre iCloud privé. Votre prénom peut être transmis à votre partenaire.",
+        "Les photos de vos contacts restent sur cet appareil. Calendarons ne transfère pas l’ensemble de votre carnet d’adresses."
+      ]
+    }
+  ],
+  "publicEmail": "calendarons@gmail.com"
+}

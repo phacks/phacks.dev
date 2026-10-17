@@ -70,9 +70,16 @@ function MoonIcon(props) {
 }
 
 function MobileNavItem({ href, children }) {
+  const { pathname } = useRouter()
+  const isActive = pathname === href || pathname.startsWith(`${href}/`)
   return (
     <li>
-      <Popover.Button as={Link} href={href} className="block py-2">
+      <Popover.Button
+        as={Link}
+        href={href}
+        aria-current={isActive ? 'page' : undefined}
+        className="block py-2"
+      >
         {children}
       </Popover.Button>
     </li>
@@ -136,12 +143,14 @@ function MobileNavigation(props) {
 }
 
 function NavItem({ href, children }) {
-  let isActive = useRouter().pathname === href
+  const { pathname } = useRouter()
+  const isActive = pathname === href || pathname.startsWith(`${href}/`)
 
   return (
     <li>
       <Link
         href={href}
+        aria-current={isActive ? 'page' : undefined}
         className={clsx(
           'relative block px-3 py-2 transition',
           isActive

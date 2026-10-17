@@ -8,19 +8,28 @@ import logoMeetup from '@/images/projects/meetup.png'
 import logoTheatresParisiens from '@/images/projects/theatres-parisiens.svg'
 import logoFalco from '@/images/projects/falco.svg'
 import logoNotion from '@/images/projects/notion.png'
+import logoCalendarons from '@/images/projects/calendarons/icon.png'
 
 const projects = [
   {
-    name: 'Notion Ruby Client',
+    name: 'Calendarons',
     description:
-      'A Ruby client for the Notion API.',
-    link: { href: 'https://github.com/orbit-love/notion-ruby-client', label: 'github.com' },
+      'A simple calendar for iPhone, iPad, and Mac. Keep your plans private or share them with your partner.',
+    link: { href: '/projects/calendarons', label: 'Discover Calendarons' },
+    logo: logoCalendarons,
+  },
+  {
+    name: 'Notion Ruby Client',
+    description: 'A Ruby client for the Notion API.',
+    link: {
+      href: 'https://github.com/orbit-love/notion-ruby-client',
+      label: 'github.com',
+    },
     logo: logoNotion,
   },
   {
     name: 'Falco',
-    description:
-      'An Open Source WebPageTest runner.',
+    description: 'An Open Source WebPageTest runner.',
     link: { href: 'https://github.com/theodo/falco', label: 'github.com' },
     logo: logoFalco,
   },
@@ -28,21 +37,30 @@ const projects = [
     name: 'Théâtres Parisiens',
     description:
       'A census of all the parisian theatres, with their history, technical information and pictures.',
-    link: { href: 'https://github.com/phacks/theatres-parisiens', label: 'github.com' },
+    link: {
+      href: 'https://github.com/phacks/theatres-parisiens',
+      label: 'github.com',
+    },
     logo: logoTheatresParisiens,
   },
   {
     name: 'Gatsby Meetup.com Source Plugin',
     description:
       'A Gatsby Source plugin to pull data from Meetup.com. Powers the jamstack.paris website.',
-    link: { href: 'https://github.com/phacks/gatsby-source-meetup', label: 'github.com' },
+    link: {
+      href: 'https://github.com/phacks/gatsby-source-meetup',
+      label: 'github.com',
+    },
     logo: logoMeetup,
   },
   {
     name: 'Showcase for Discogs',
     description:
       'Showcase your Discogs discography. A fun side projects to learn about making my own Gatsby Plugin.',
-    link: { href: 'https://github.com/phacks/showcase-for-discogs', label: 'github.com' },
+    link: {
+      href: 'https://github.com/phacks/showcase-for-discogs',
+      label: 'github.com',
+    },
     logo: logoShowcaseForDiscogs,
   },
 ]
@@ -78,7 +96,7 @@ export default function Projects() {
         >
           {projects.map((project) => (
             <Card as="li" key={project.name}>
-              <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
+              <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md ring-1 shadow-zinc-800/5 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
                 <Image
                   src={project.logo}
                   alt=""

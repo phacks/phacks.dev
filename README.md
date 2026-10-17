@@ -33,9 +33,15 @@ set to the production URL even on previews. No secrets are needed to build the s
 - `src/lib/generateRssFeed.js`: generates `public/rss/feed.xml` and `feed.json`
   during a production build. Generated feeds are not committed.
 
-For the future Calendarons page, add `src/pages/calendarons.jsx` for `/calendarons`
-(or a directory of pages if it needs multiple routes). Use the existing `Container`
-and `next/head` patterns, and add a navigation or project link when it is ready.
+Calendarons lives at `/projects/calendarons`, with `/support` and `/privacy`
+under that route. These pages reuse the site shell, have French content and
+canonical metadata, and are excluded from Vercel Analytics (including client
+navigation from other pages). `src/content/calendarons-help.json` is a reviewed
+copy of the app’s five offline FAQ articles; update it when app help changes.
+Only the public support alias belongs in this public file, never the developer’s
+private support address. The page displays in-app contact instructions while the
+public alias is unset. Replace the availability label with the official App Store
+link when the app is publicly released. Screenshots contain sample events only.
 
 The Swaive logo is the [official website’s webclip asset](https://cdn.prod.website-files.com/66e95d61b49881437abf3ea4/66eaa5d23a5d542aa8cab429_webclip.png),
 served locally as `src/images/logos/swaive.png`. Its three square cutouts are
