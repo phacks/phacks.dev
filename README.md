@@ -75,11 +75,12 @@ to **phacks/phacks.dev**. Vercel’s Git integration builds pushed branches as p
 deployments and publishes `master` to the production domain. GitHub Actions and
 Vercel’s deployment check run independently; check both before merging.
 
-Vercel should use the Next.js preset, repository root, `npm ci` for installation,
-`npm run build`, and the default Next.js output directory. The committed
-`engines.node: 24.x` selects Node 24 even if the dashboard still shows an older
-project default. Set `NEXT_PUBLIC_SITE_URL=https://www.phacks.dev` in development,
-preview, and production. No Vercel token is needed in GitHub Actions because the
+Vercel uses the Next.js preset, repository root, `npm ci` for installation,
+`npm run build`, and the default Next.js output directory. Both the project’s
+runtime setting and the committed `engines.node` select Node 24.
+`NEXT_PUBLIC_SITE_URL=https://www.phacks.dev` is configured in development,
+preview, and production, matching the domain that `phacks.dev` redirects to.
+No Vercel token is needed in GitHub Actions because the
 Vercel Git integration handles deployment.
 
 ### Dependency maintenance notes
