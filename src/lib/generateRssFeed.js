@@ -1,13 +1,12 @@
 import ReactDOMServer from 'react-dom/server'
-import { MemoryRouterProvider } from 'next-router-mock/MemoryRouterProvider'
 import { Feed } from 'feed'
 import { mkdir, writeFile } from 'fs/promises'
 
 import { getAllArticles } from './getAllArticles'
+import { siteUrl } from './site'
 
 export async function generateRssFeed() {
   let articles = await getAllArticles()
-  let siteUrl = process.env.NEXT_PUBLIC_SITE_URL
   let author = {
     name: 'Nicolas Goutay',
     email: 'nicolas.goutay@gmail.com',
@@ -31,9 +30,7 @@ export async function generateRssFeed() {
   for (let article of articles) {
     let url = `${siteUrl}/articles/${article.slug}`
     let html = ReactDOMServer.renderToStaticMarkup(
-      <MemoryRouterProvider>
-        <article.component isRssFeed />
-      </MemoryRouterProvider>
+      <article.component isRssFeed />,
     )
 
     feed.addItem({
