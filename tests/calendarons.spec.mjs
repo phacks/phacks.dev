@@ -29,6 +29,7 @@ test('Calendarons pages, disclosures and privacy work on desktop and mobile', as
   await page.getByRole('link', { name: 'Consulter l’aide' }).click()
   await expect(page).toHaveURL('/projects/calendarons/support')
   await expect(page.locator('details')).toHaveCount(5)
+  await expect(page.getByRole('link', { name: 'calendarons@gmail.com', exact: true })).toHaveAttribute('href', 'mailto:calendarons@gmail.com')
   await page.getByText('Partager avec mon partenaire', { exact: true }).click()
   await expect(page.locator('#partner')).toHaveAttribute('open', '')
   await expect(page.locator('#partner')).toContainText('Commun')
