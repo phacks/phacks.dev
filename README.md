@@ -113,13 +113,13 @@ Vercel Git integration handles deployment.
 
 ### Dependency maintenance notes
 
-`npm audit --omit=dev` reports no known vulnerabilities after this update. The full
-audit still reports the unpatched `braces` denial-of-service advisory through
-`eslint-config-next` → `fast-glob` → `micromatch` (five affected package entries for
-one underlying advisory). These packages process repository paths during linting;
-they are not used by the deployed application. Do not use `npm audit fix --force`,
-which currently proposes downgrading Next.js’s ESLint configuration to version 14.
-Revisit this when the upstream tooling releases a fix.
+The Blob SDK's OIDC helper depends on `@vercel/cli-config`, which pins an older
+Zod version. Its targeted override uses Zod 4.6.7+ to avoid
+[GHSA-mrhx-c7xc-m3w5](https://github.com/advisories/GHSA-mrhx-c7xc-m3w5); remove the
+override once the upstream dependency includes the fix.
+
+`npm audit` and `npm audit --omit=dev` report no known vulnerabilities after this
+update.
 
 The targeted `postcss-selector-parser` override uses the patched 7.1.6+ release for
 Tailwind Typography; remove it once Typography updates its dependency. Tailwind 4
