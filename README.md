@@ -51,6 +51,7 @@ transparent; a white CSS background preserves the white-on-black mark in either 
 
 ```sh
 npm run lint
+npm run test:unit
 npm run build
 npx playwright install chromium
 npm run test:e2e
@@ -69,6 +70,27 @@ dynamic MDX imports and the MDX pipeline has JavaScript remark/rehype plugins.
 `next lint` was removed in Next.js 16; linting now uses ESLint’s flat configuration.
 ESLint stays on the latest 9.x release because the React, accessibility, and import
 plugins in `eslint-config-next` do not yet support ESLint 10.
+
+## Arthur's private gift
+
+`/arthur?key=<secret>` immediately downloads `Berkeley-Mono.zip`. The QR link is
+a bearer credential: anyone holding the complete link can download the gift.
+The ZIP lives in a **private** Vercel Blob store, outside the repository and
+`public/`. `/arthur` rewrites to `/api/arthur`, which verifies the key before
+reading the fixed blob. Responses are never cached and the file is sent as an
+attachment; there is no landing page or analytics script.
+
+Configure these server-only environment variables in Vercel:
+
+- `ARTHUR_GIFT_KEY_SHA256`: SHA-256 hex digest of a 32-byte random base64url key.
+- `ARTHUR_GIFT_BLOB_PATH`: the pathname of the uploaded private ZIP.
+- `BLOB_READ_WRITE_TOKEN`: provided by the connected private Blob store.
+
+Generate and keep the actual key outside git; only its hash goes in Vercel's
+environment. Use `https://www.phacks.dev/arthur?key=<secret>` in the QR code to
+avoid the site's apex-domain redirect. To revoke the printed link, remove or
+replace `ARTHUR_GIFT_KEY_SHA256` and redeploy. Missing configuration fails closed.
+The download unit tests run without real credentials or licensed font files.
 
 ## CI and Vercel
 
